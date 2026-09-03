@@ -15,9 +15,10 @@ export function formatNotifAge(
   date: Date,
   format: NotifTimeFormat,
   nowMs: number,
-  locale: "de" | "en" = "de",
+  // Jede Sprache; alles ausser Deutsch faellt auf Englisch zurueck (#89).
+  locale: string = "de",
 ): string {
-  const en = locale === "en";
+  const en = locale !== "de";
   if (format === "auto") {
     return formatDistanceToNow(date, { addSuffix: true, locale: en ? enUS : de });
   }

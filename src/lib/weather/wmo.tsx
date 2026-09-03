@@ -192,8 +192,12 @@ export function wmoToIcon(
   return <Cloud {...props} className="w-full h-full opacity-80" />;
 }
 
-export function wmoToText(code: number, locale: "de" | "en" = "de"): string {
-  const en = locale === "en";
+// Nimmt jede Oberflaechensprache an. Eigene Texte gibt es nur auf Deutsch und
+// Englisch; jede andere Sprache (Norwegisch seit #89) faellt auf Englisch
+// zurueck — nicht auf Deutsch, das waere fuer einen norwegischen Bildschirm
+// die falsche Richtung.
+export function wmoToText(code: number, locale: string = "de"): string {
+  const en = locale !== "de";
   if (code === 0) return en ? "Clear" : "Klar";
   if (code === 1) return en ? "Mostly clear" : "Leicht bewölkt";
   if (code === 2) return en ? "Cloudy" : "Bewölkt";
