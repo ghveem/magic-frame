@@ -12,6 +12,61 @@ const CADDY_FILE = join(CADDY_CONFIG_DIR, "Caddyfile");
 const CADDY_ADMIN = process.env.CADDY_ADMIN_URL || "http://caddy:2019";
 
 /**
+ * Spricht die Admin-API mit node:http statt mit fetch() — und das ist der
+ * ganze Fix fuer #95.
+ *
+ * Caddy 2.11 prueft bei Anfragen, die nach Browser aussehen, den Origin. Nodes
+ * fetch() (undici) schickt von sich aus `Sec-Fetch-Mode: cors` mit — ohne
+ * Origin, weil es keinen hat. Fuer Caddy ist das ein Browser mit leerem
+ * Origin, und der bekommt 403: "client is not allowed to access from origin
+ * ''". Der Kopf laesst sich in undici nicht abschalten. node:http schickt
+ * schlicht keine Sec-Fetch-Kopfzeilen, also unterbleibt die Pruefung — ohne
+ * dass am Caddyfile etwas geaendert werden muss. Das ist wichtig: bestehende
+ * Installationen laden ihren alten Caddyfile, und der muss zum Reparieren
+ * ueberhaupt erst einmal wieder durchgehen.
+ */
+async function adminRequest(
+  path: string,
+  init: { method?: string; headers?: Record<string, string>; body?: string; timeoutMs?: number } = {},
+): Promise<{ ok: boolean; status: number; text: () => Promise<string>; json: () => Promise<any> }> {
+  const { request } = await import("node:http");
+  const url = new URL(path, CADDY_ADMIN.endsWith("/") ? CADDY_ADMIN : CADDY_ADMIN + "/");
+  return new Promise((resolve, reject) => {
+    const req = request(
+      {
+        host: url.hostname,
+        port: url.port || 80,
+        path: url.pathname + url.search,
+        method: init.method || "GET",
+        headers: {
+          ...(init.headers || {}),
+          ...(init.body != null ? { "Content-Length": String(Buffer.byteLength(init.body)) } : {}),
+        },
+        timeout: init.timeoutMs ?? 10000,
+      },
+      (res) => {
+        let buf = "";
+        res.setEncoding("utf8");
+        res.on("data", (d) => (buf += d));
+        res.on("end", () => {
+          const status = res.statusCode || 0;
+          resolve({
+            ok: status >= 200 && status < 300,
+            status,
+            text: async () => buf,
+            json: async () => JSON.parse(buf),
+          });
+        });
+      },
+    );
+    req.on("timeout", () => req.destroy(new Error("timeout")));
+    req.on("error", reject);
+    if (init.body != null) req.write(init.body);
+    req.end();
+  });
+}
+
+/**
  * Schreibt das Caddyfile ins Shared-Volume und triggert via Admin-API einen
  * Reload. Caddy parsed dabei das neue File, validiert es und lädt es atomar —
  * wenn das fehlschlägt, läuft die alte Config weiter.
@@ -34,11 +89,11 @@ export async function writeAndReload(caddyfile: string): Promise<{
   // wir nutzen den Endpoint `/load` mit Header `Content-Type: text/caddyfile`,
   // dann adaptiert Caddy selbst und reloaded. Das ist atomar.
   try {
-    const res = await fetch(`${CADDY_ADMIN}/load`, {
+    const res = await adminRequest("load", {
       method: "POST",
       headers: { "Content-Type": "text/caddyfile" },
       body: caddyfile,
-      signal: AbortSignal.timeout(10000),
+      timeoutMs: 10000,
     });
     if (!res.ok) {
       const text = await res.text().catch(() => "");
@@ -80,10 +135,7 @@ export async function fetchCaddyStatus(): Promise<{
   certNotAfter?: string | null;
 }> {
   try {
-    const res = await fetch(`${CADDY_ADMIN}/config/apps/tls/certificates/automate`, {
-      cache: "no-store",
-      signal: AbortSignal.timeout(3000),
-    });
+    const res = await adminRequest("config/apps/tls/certificates/automate", { timeoutMs: 3000 });
     if (!res.ok) {
       // /load mit Caddyfile speichert die Config — der Pfad existiert vielleicht
       // nicht. Trotzdem reachable=true.
