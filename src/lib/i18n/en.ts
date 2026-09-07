@@ -522,6 +522,8 @@ export const EN: Record<string, string> = {
   "Eine andere Home-Assistant-Instanz lässt sich im Add-on nicht eintragen — dafür Magic Frame per Docker installieren.":
     "The add-on cannot point at a different Home Assistant — install Magic Frame with Docker for that.",
   "Sichtbarkeit": "Visibility",
+  // #100: Platzhalter namenloser Kalendertermine (Google/Microsoft)
+  "(kein Titel)": "(No title)",
   "Automatisch über Home Assistant": "Automatic via Home Assistant",
   "Beim Laden versteckt (per Button einblendbar)": "Hidden on load (shown via a button)",
   "Blendet dieses Widget automatisch ein/aus, je nach Status einer HA-Entity. Für Gruppen den Button-Trigger nutzen.": "Shows/hides this widget automatically based on an HA entity's state. Use the button trigger for groups.",

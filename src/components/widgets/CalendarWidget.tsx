@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   parseISO, isToday, isTomorrow, isSameDay, addDays, isValid, format,
   startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval,
@@ -205,7 +205,18 @@ export default function CalendarWidget({ config, dashboardId, onVisibilityChange
   const gridLine = isLight ? "rgba(15,23,42,0.10)" : "rgba(255,255,255,0.07)";
   const borderCls = isLight ? "border-black/10" : "border-white/10";
 
-  const [fetchedEvents, setEvents] = useState<CalendarEvent[]>([]);
+  const [rawEvents, setEvents] = useState<CalendarEvent[]>([]);
+  // #100: Google/Microsoft liefern fuer namenlose Termine den Platzhalter
+  // "(kein Titel)" — die Quellsprache, wie jeder andere Text im Code. Die
+  // Anzeige ist der einzige Ort, der die Oberflaechensprache kennt (Displays
+  // haben keine Sitzung, die Sprache liegt im Browser), also wird er HIER
+  // uebersetzt und nicht in der API. Bewusst nur der exakte Platzhalter:
+  // echte Titel gehen unveraendert durch.
+  const fetchedEvents = useMemo(
+    () => rawEvents.map((e) => (e.title === "(kein Titel)" ? { ...e, title: t("(kein Titel)") } : e)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [rawEvents, locale],
+  );
   // Vorschau-Beispieldaten (#42): Der Editor injiziert __demo. Echte Termine
   // bleiben stehen und werden bis zur KONFIGURIERTEN Anzahl mit Beispielen
   // aufgefüllt — so sieht man das Layout bei voller Liste, auch wenn der
