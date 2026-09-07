@@ -7,7 +7,7 @@ This page is only about the **sources**. Everything the Weather and Clock widget
 *do* with the numbers — icons, units, which values to show, the forecast row — is
 on [Time and weather widgets](widgets-time-weather.md).
 
-## The four
+## The six
 
 | Provider | Needs a key | Needs the internet | What it is |
 | --- | --- | --- | --- |
@@ -15,6 +15,8 @@ on [Time and weather widgets](widgets-time-weather.md).
 | `dwd` | no | yes | The German weather service's ICON model, fetched through Open-Meteo. Most accurate for Germany and central Europe. |
 | `openweathermap` | **yes** | yes | An alternative, for people who already have an OpenWeatherMap key. |
 | `home-assistant` | no | no | Reads a `weather.*` entity from your own [Home Assistant](home-assistant.md), so the frame agrees with the rest of the house. |
+| `wunderground` | **yes** | yes | Weather Underground (The Weather Company). Free key for owners of a personal weather station; optionally overlays your own station's readings. Community-contributed. |
+| `pirateweather` | **yes** | yes | Pirate Weather, a Dark Sky-compatible API with a free tier of 10,000 calls a month. Community-contributed. |
 
 You pick one in the widget: open the view in the editor, click the **Weather**
 (`Wetter`) widget, and choose under **Datenquelle** (Data source) at the very top
@@ -143,3 +145,28 @@ hourly row stays empty, that is the integration, not Magic Frame.
 | No sun times with Home Assistant | Expected — see above. |
 
 More in [Troubleshooting](troubleshooting.md).
+
+## Weather Underground and Pirate Weather
+
+Both arrived from the community in v1.5.4 (PRs #97 and #99 by sth2258) and
+both need a key.
+
+**For now the key comes from the environment only.** Put
+`WUNDERGROUND_API_KEY=…` or `PIRATEWEATHER_API_KEY=…` into the `.env` next to
+your `docker-compose.yml` and restart the app. A card on the Integrations page,
+like the one OpenWeatherMap has, is the missing half and is on the list — until
+it exists, the Home Assistant add-on cannot use these two, because an add-on
+has no `.env` to edit.
+
+- **Weather Underground** asks for a TWC key. Owners of a personal weather
+  station get one for free from wunderground.com. In the widget, a **Station
+  ID** field appears once the provider is selected; fill it in to overlay
+  your own station's temperature, humidity and wind on top of the forecast.
+- **Pirate Weather** is the drop-in replacement for the retired Dark Sky API.
+  Register at pirateweather.net for a key; the free tier covers a wall display
+  many times over. Delivers current conditions, a six-day forecast and hourly
+  precipitation probability.
+
+Both map the provider's own condition codes onto the same WMO codes the other
+providers use, so every icon set works with them unchanged.
+

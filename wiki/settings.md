@@ -77,7 +77,11 @@ token. [Users and security](users-and-security.md) lists both sides in full.
 
 *Allgemein.* One card: **Language** (*Sprache*).
 
-Two buttons, **German** and **English**. Clicking one does two separate things:
+Four buttons: **German**, **English**, **Norwegian (Bokmål)** and **Norwegian
+(Nynorsk)**. German is the language the interface is written in; English covers
+everything. The two Norwegian ones came from the community and fall back to
+English for anything not translated yet, never to German. Clicking one does two
+separate things:
 
 1. It switches the language in **this browser** immediately, and remembers it
    there.
