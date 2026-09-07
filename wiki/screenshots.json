@@ -76,8 +76,8 @@
         }
       ],
       "takenAt": {
-        "src/components/widgets/WeatherWidget.tsx": "29adc95b3d26",
-        "src/lib/weather/wmo.tsx": "16eddd888f60"
+        "src/components/widgets/WeatherWidget.tsx": "2a0b2267c43a",
+        "src/lib/weather/wmo.tsx": "6bae30d7dc8c"
       }
     },
     {
@@ -125,7 +125,7 @@
       ],
       "element": ".react-grid-item",
       "takenAt": {
-        "src/components/widgets/CalendarWidget.tsx": "14b886315dc0"
+        "src/components/widgets/CalendarWidget.tsx": "d4f04eeef559"
       }
     },
     {
@@ -834,7 +834,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "2c3c3d23c4ed"
+        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
       }
     },
     {
@@ -859,7 +859,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "2c3c3d23c4ed"
+        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
       }
     },
     {
@@ -884,7 +884,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "2c3c3d23c4ed"
+        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
       }
     },
     {
@@ -909,7 +909,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "2c3c3d23c4ed"
+        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
       }
     },
     {
@@ -934,7 +934,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "2c3c3d23c4ed"
+        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
       }
     },
     {
@@ -959,7 +959,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "2c3c3d23c4ed"
+        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
       }
     },
     {
@@ -990,7 +990,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "2c3c3d23c4ed"
+        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
       },
       "element": "div.rounded-2xl:has(h2:text-is(\"Dynamic DNS (DDNS)\"))"
     },
@@ -1223,7 +1223,7 @@
         }
       ],
       "takenAt": {
-        "src/components/widgets/WeatherWidget.tsx": "29adc95b3d26"
+        "src/components/widgets/WeatherWidget.tsx": "2a0b2267c43a"
       }
     },
     {
