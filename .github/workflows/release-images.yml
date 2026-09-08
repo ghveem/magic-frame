@@ -1,12 +1,20 @@
 name: Release images
 
 # Baut die App- und Caddy-Images vor und schiebt sie als Multi-Arch
-# (amd64 + arm64) nach ghcr.io, damit User per `docker compose pull`
-# installieren können statt lokal zu bauen — auf dem Raspberry Pi spart
-# das 15-25 min Compile-Zeit. (#9)
+# (amd64 + arm64) nach ghcr.io (+ Docker Hub), damit User per
+# `docker compose pull` installieren können statt lokal zu bauen — auf dem
+# Raspberry Pi spart das 15-25 min Compile-Zeit. (#9)
 #
 # Läuft bei jedem v*-Release-Tag UND manuell (workflow_dispatch) zum Testen.
 # Rein additiv: der bestehende build-from-source-Pfad bleibt unverändert.
+#
+# Seit 1.5.4 wird jede Plattform NATIV gebaut (amd64 auf ubuntu-latest,
+# arm64 auf GitHubs arm-Läufer) statt arm64 unter QEMU zu emulieren:
+# `npm ci` blieb unter QEMU zweimal hintereinander ohne Ausgabe hängen, bis
+# das 90-Minuten-Limit zuschlug (v1.5.4, 7./8.9.2026) — ohne dass sich eine
+# Abhängigkeit geändert hätte. Jede Plattform pusht ihr Abbild per Digest,
+# der Sammel-Job `merge` fügt daraus das Multi-Arch-Manifest zusammen (das
+# Muster aus der Docker-Doku: "distribute build across multiple runners").
 
 on:
   push:
@@ -23,69 +31,49 @@ permissions:
   packages: write
 
 jobs:
-  build-push:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        # magic-frame-app-ha ist dasselbe Abbild wie magic-frame-app, aber mit
+        # dem Ingress-Platzhalter gebaut — nur das Add-on benutzt es. Bewusst
+        # ein ZWEITES statt eines gemeinsamen: sonst bekämen alle Compose- und
+        # Kubernetes-Nutzer ein .next, das beim Start noch umgeschrieben werden
+        # muss, und das Add-on-Risiko liefe im Hauptprodukt mit.
+        image: [magic-frame-app, magic-frame-app-ha, magic-frame-caddy]
+        platform: [linux/amd64, linux/arm64]
+    runs-on: ${{ matrix.platform == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     # `secrets` darf NICHT direkt in einem step-`if:` stehen (GitHub-Limitierung
     # → "workflow file issue"). Darum hier einmal als Job-env-Flag heben und
     # unten via `env.HAS_DOCKERHUB` prüfen.
     env:
       HAS_DOCKERHUB: ${{ secrets.DOCKERHUB_USERNAME != '' }}
-    # arm64 unter QEMU-Emulation ist langsam (xcaddy + Next.js build),
-    # aber das passiert nur einmal pro Release, nicht pro User.
-    timeout-minutes: 90
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - image: magic-frame-app
-            context: .
-          # Dasselbe Abbild, aber mit dem Ingress-Platzhalter gebaut — nur das
-          # Add-on benutzt es. Bewusst ein ZWEITES statt eines gemeinsamen:
-          # sonst bekämen alle Compose- und Kubernetes-Nutzer ein .next, das
-          # beim Start noch umgeschrieben werden muss, und das Add-on-Risiko
-          # liefe im Hauptprodukt mit.
-          - image: magic-frame-app-ha
-            context: .
-            build_args: |
-              MF_BASE_PATH=/__MF_INGRESS_BASE_PATH_PLACEHOLDER__
-          - image: magic-frame-caddy
-            context: ./caddy
-
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
-      - name: Versions-Tag bestimmen
-        id: ver
+      - name: Kontext, Build-Args und Abbild-Namen bestimmen
+        id: prep
         run: |
-          if [ "${{ github.ref_type }}" = "tag" ]; then
-            # v1.0.8 -> 1.0.8
-            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
-          else
-            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Image-Tags zusammenstellen
-        id: meta
-        run: |
+          case "${{ matrix.image }}" in
+            magic-frame-app)    CONTEXT="."; BUILD_ARGS="" ;;
+            magic-frame-app-ha) CONTEXT="."; BUILD_ARGS="MF_BASE_PATH=/__MF_INGRESS_BASE_PATH_PLACEHOLDER__" ;;
+            magic-frame-caddy)  CONTEXT="./caddy"; BUILD_ARGS="" ;;
+          esac
+          echo "context=${CONTEXT}" >> "$GITHUB_OUTPUT"
+          echo "build_args=${BUILD_ARGS}" >> "$GITHUB_OUTPUT"
           # Push to BOTH registries in one build: ghcr.io (no pull rate limit,
-          # robust default) + Docker Hub (discoverability). The Docker Hub block
+          # robust default) + Docker Hub (discoverability). The Docker Hub name
           # is only added when DOCKERHUB_USERNAME is set, so the workflow still
           # works for forks that haven't configured Hub.
-          GHCR="ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}"
-          TAGS="${GHCR}:latest"
-          if [ -n "${{ steps.ver.outputs.version }}" ]; then
-            TAGS="${TAGS},${GHCR}:${{ steps.ver.outputs.version }}"
+          NAMES="ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}"
+          if [ "${HAS_DOCKERHUB}" = "true" ]; then
+            NAMES="${NAMES},docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}"
           fi
-          if [ -n "${{ secrets.DOCKERHUB_USERNAME }}" ]; then
-            HUB="docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}"
-            TAGS="${TAGS},${HUB}:latest"
-            if [ -n "${{ steps.ver.outputs.version }}" ]; then
-              TAGS="${TAGS},${HUB}:${{ steps.ver.outputs.version }}"
-            fi
-          fi
-          echo "tags=${TAGS}" >> "$GITHUB_OUTPUT"
+          echo "names=${NAMES}" >> "$GITHUB_OUTPUT"
+          PAIR="${{ matrix.platform }}"
+          echo "pair=${PAIR//\//-}" >> "$GITHUB_OUTPUT"
 
-      - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
 
       - name: Login bei ghcr.io
@@ -104,15 +92,89 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build + Push (amd64 + arm64)
+      - name: Build + Push per Digest (eine Plattform, nativ)
+        id: build
         uses: docker/build-push-action@v6
         with:
-          context: ${{ matrix.context }}
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          # Leer für alle bis auf magic-frame-app-ha — siehe Matrix oben.
-          build-args: ${{ matrix.build_args }}
-          # Getrennter Cache pro Image, sonst überschreiben sich app + caddy.
-          cache-from: type=gha,scope=${{ matrix.image }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.image }}
+          context: ${{ steps.prep.outputs.context }}
+          platforms: ${{ matrix.platform }}
+          build-args: ${{ steps.prep.outputs.build_args }}
+          outputs: type=image,"name=${{ steps.prep.outputs.names }}",push-by-digest=true,name-canonical=true,push=true
+          # Getrennter Cache pro Abbild UND Plattform, sonst überschreiben sie sich.
+          cache-from: type=gha,scope=${{ matrix.image }}-${{ steps.prep.outputs.pair }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}-${{ steps.prep.outputs.pair }}
+
+      - name: Digest ablegen
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.image }}-${{ steps.prep.outputs.pair }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      HAS_DOCKERHUB: ${{ secrets.DOCKERHUB_USERNAME != '' }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [magic-frame-app, magic-frame-app-ha, magic-frame-caddy]
+    steps:
+      - name: Versions-Tag bestimmen
+        id: ver
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            # v1.0.8 -> 1.0.8
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          # "-linux-*" statt "-*": sonst träfe das Muster für magic-frame-app auch
+          # die Artefakte von magic-frame-app-ha (Lauf 34206691313, 8.9.2026).
+          pattern: digests-${{ matrix.image }}-linux-*
+          merge-multiple: true
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login bei ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login bei Docker Hub
+        if: env.HAS_DOCKERHUB == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Multi-Arch-Manifest zusammenfügen und taggen
+        working-directory: /tmp/digests
+        run: |
+          VER="${{ steps.ver.outputs.version }}"
+          ls -1
+          publish() {  # $1 = Abbild-Name in seiner Registry
+            TAGS="-t $1:latest"
+            if [ -n "${VER}" ]; then TAGS="${TAGS} -t $1:${VER}"; fi
+            # shellcheck disable=SC2046,SC2059
+            docker buildx imagetools create ${TAGS} $(printf "$1@sha256:%s " *)
+            docker buildx imagetools inspect "$1:latest"
+          }
+          publish "ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}"
+          if [ "${HAS_DOCKERHUB}" = "true" ]; then
+            publish "docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}"
+          fi
