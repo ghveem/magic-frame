@@ -510,11 +510,13 @@ export default function WallpaperSettingsModal({
              {(wallpaper.source === 'bundled' || wallpaper.source === 'unsplash' || wallpaper.source === 'webdav' || wallpaper.source === 'immich') && (
                 <div>
                    <label className="text-sm font-medium text-[var(--mf-fg)]/80 mb-2 flex justify-between">
-                      <span>{t("Bildwechsel Intervall (Sekunden)")}</span>
-                      <span className="text-blue-400">{wallpaper.intervalSec}s</span>
+                      <span>{t("Bildwechsel Intervall")}</span>
+                      <span className="text-blue-400">{wallpaper.intervalSec >= 3600 ? `${Math.floor(wallpaper.intervalSec / 3600)}h ${Math.floor((wallpaper.intervalSec % 3600) / 60)}m` : wallpaper.intervalSec >= 60 ? `${Math.floor(wallpaper.intervalSec / 60)}m ${wallpaper.intervalSec % 60}s` : `${wallpaper.intervalSec}s`}</span>
                    </label>
                    <input
-                      type="range" min="10" max="3600" step="10" value={wallpaper.intervalSec}
+                      type="range" min="10" max="86400"
+                      step={wallpaper.intervalSec >= 3600 ? 300 : wallpaper.intervalSec >= 600 ? 60 : 10}
+                      value={wallpaper.intervalSec}
                       onChange={(e) => setWallpaper({ ...wallpaper, intervalSec: parseInt(e.target.value) })}
                       className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-blue-500 bg-[var(--mf-elev)]/10"
                    />

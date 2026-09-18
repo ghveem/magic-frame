@@ -135,14 +135,14 @@ export function ImageInspector({ widget, updateConfig }: Props) {
 
       <div>
         <label className="text-sm font-medium text-[var(--mf-fg)]/80 mb-2 flex justify-between">
-          <span>{t("Bildwechsel Intervall (Sekunden)")}</span>
-          <span className="text-blue-400">{intervalSec}s</span>
+          <span>{t("Bildwechsel Intervall")}</span>
+          <span className="text-blue-400">{intervalSec >= 3600 ? `${Math.floor(intervalSec / 3600)}h ${Math.floor((intervalSec % 3600) / 60)}m` : intervalSec >= 60 ? `${Math.floor(intervalSec / 60)}m ${intervalSec % 60}s` : `${intervalSec}s`}</span>
         </label>
         <input
           type="range"
           min="5"
-          max="600"
-          step="5"
+          max="86400"
+          step={intervalSec >= 3600 ? 300 : intervalSec >= 600 ? 60 : 5}
           value={intervalSec}
           onChange={(e) => updateConfig(widget.i, "intervalSec", parseInt(e.target.value))}
           className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-blue-500 bg-[var(--mf-elev)]/10"
