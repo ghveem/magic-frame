@@ -521,6 +521,8 @@ export const NN: Record<string, string> = {
   "Eine andere Home-Assistant-Instanz lässt sich im Add-on nicht eintragen — dafür Magic Frame per Docker installieren.":
     "Ein annan Home Assistant-instans kan ikkje setjast opp i tillegget — installer Magic Frame via Docker for det.",
   "Sichtbarkeit": "Synlegheit",
+  // #100: Plasshaldar for kalenderavtalar utan namn (Google/Microsoft)
+  "(kein Titel)": "(Ingen tittel)",
   "Automatisch über Home Assistant": "Automatisk via Home Assistant",
   "Beim Laden versteckt (per Button einblendbar)": "Skjult ved lasting (kan visast via knapp)",
   "Blendet dieses Widget automatisch ein/aus, je nach Status einer HA-Entity. Für Gruppen den Button-Trigger nutzen.": "Viser/skjuler denne widgeten automatisk basert på statusen til ein HA-entitet. Bruk knapp-utløysaren for grupper.",
@@ -582,6 +584,8 @@ export const NN: Record<string, string> = {
   "Füllen schneidet Ränder ab. Einpassen zeigt das ganze Bild ohne Beschneiden — gut für Hochformat-Fotos.": "Fyll skjer av kantane. Tilpass viser heile biletet utan avskjering — bra for ståande bilete.",
   "Metadata/EXIF einblenden": "Vis metadata/EXIF",
   "Ladekreis (Timer) anzeigen": "Vis lastesirkel (tidtakar)",
+  "Der Ring läuft stufenlos und hält den Browser dabei durchgehend am Zeichnen — auf einer sonst ruhigen Ansicht kostet das rund ein Drittel eines Prozessorkerns. Ausschalten spart das komplett. Auf Wandtablets, Pi-Displays und Fernsehern merkt man das an Wärme und Stromverbrauch.":
+    "Ringen går jamt og held nettlesaren i konstant teikning — på ei elles roleg vising kostar det omtrent ein tredjedel av ein prosessorkjerne. Å skru han av sparer alt dette. På veggnettbrett, Pi-skjermar og TV-ar merkast det som varme og straumforbruk.",
   "Bildwechsel Intervall (Sekunden)": "Biletbyte-intervall (sekund)",
   "Schatten Oben": "Skugge øvst",
   "Schatten Unten": "Skugge nedst",
@@ -2089,4 +2093,10 @@ export const NN: Record<string, string> = {
   "Einige dieser Werte kann dieses Konto nicht abrufen — sie brauchen eine Administrator-Rolle. Was hier steht, ist deshalb unvollständig.":
     "Denne kontoen kan ikkje henta enkelte av desse verdiane — dei krev ei administratorrolle. Det som står her, er difor ufullstendig.",
   "Ein Kalender antwortet nicht": "Ein kalender svarar ikkje",
+
+  // Sjølvlukkande popup-widgetar — knapp kan skjula sin eigen widget etter handling
+  "Dieses Widget nach der Aktion ausblenden": "Skjul denne widgeten etter handling",
+  "Tippen außerhalb der Buttons schließt das Widget": "Trykk utanfor knappane lukkar widgeten",
+  "Verzögerung vor dem Ausblenden": "Forseinking før skjuling",
+  "Sofort": "Straks",
 };
