@@ -88,6 +88,7 @@ export default function DashboardView({ params }: { params: Promise<{ id: string
   >({});
   // Per-view settings (orientation, autoRefreshHours, …) from /api/layout/get.
   const [viewSettings, setViewSettings] = useState<any>(null);
+  const [wallpaperAdvanceSeq, setWallpaperAdvanceSeq] = useState(0);
 
   // Trigger configs from the current layout. The entity list feeds the live
   // subscription; per-widget config drives visibility. Rebuilt each render but
@@ -591,6 +592,11 @@ export default function DashboardView({ params }: { params: Promise<{ id: string
           window.location.reload();
        }
     });
+    socket.on('NEXT_WALLPAPER', (targetId: string | null) => {
+       if (!targetId || targetId === effectiveIdRef.current || targetId === dashboardId) {
+          setWallpaperAdvanceSeq((s) => s + 1);
+       }
+    });
     return () => {
        window.removeEventListener('WIDGET_ACTION', handleWidgetAction);
        socket.disconnect();
@@ -620,7 +626,7 @@ export default function DashboardView({ params }: { params: Promise<{ id: string
         stellt sie allen Widgets bereit, die kein festes Theme haben. */}
     <ViewThemeScope settings={viewSettings}>
     <div className="relative w-screen h-screen overflow-hidden text-white font-sans bg-black">
-      <WallpaperEngine dashboardId={dashboardId} config={wallpaperConfig} />
+      <WallpaperEngine dashboardId={dashboardId} config={wallpaperConfig} advanceSignal={wallpaperAdvanceSeq} />
       <ActionRefusedToast />
 
       {/* Diese Ansicht gibt es nicht. Bewusst ruhig gehalten — das hier haengt

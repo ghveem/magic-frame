@@ -47,10 +47,12 @@ const WALLPAPER_POS: Record<string, string> = {
 
 export default function WallpaperEngine({
   config,
-  dashboardId = "1"
+  dashboardId = "1",
+  advanceSignal = 0,
 }: {
   config?: any;
   dashboardId?: string;
+  advanceSignal?: number;
 }) {
   const { locale, t } = useLocale();
   const [images, setImages] = useState<WallpaperData[]>([]);
@@ -206,6 +208,15 @@ export default function WallpaperEngine({
     }, intervalMs);
     return () => clearInterval(interval);
   }, [isReady, images.length, intervalMs, splitMode]);
+
+  const advanceRef = useRef(advanceSignal);
+  useEffect(() => {
+    if (advanceSignal === advanceRef.current) return;
+    advanceRef.current = advanceSignal;
+    if (images.length > 1) {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }
+  }, [advanceSignal, images.length]);
 
   // Preload über Image()-Instanzen statt DOM-<img>. Browser-Cache reicht.
   // Im Split-Modus übernimmt <SplitSlideshow> das Preloading selbst.
