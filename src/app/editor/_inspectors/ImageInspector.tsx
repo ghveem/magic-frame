@@ -5,6 +5,10 @@ import { usePathname } from "next/navigation";
 import { RefreshCw } from "lucide-react";
 import type { WidgetLayoutItem } from "../_types";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { formatInterval, intervalStops, nearestStopIndex } from "@/lib/ui/intervalStops";
+
+// Regler-Stufen, siehe intervalStops.ts — Mindestwert wie bisher.
+const IMAGE_STOPS = intervalStops(5);
 
 type Props = {
   widget: WidgetLayoutItem;
@@ -136,15 +140,15 @@ export function ImageInspector({ widget, updateConfig }: Props) {
       <div>
         <label className="text-sm font-medium text-[var(--mf-fg)]/80 mb-2 flex justify-between">
           <span>{t("Bildwechsel Intervall")}</span>
-          <span className="text-blue-400">{intervalSec >= 3600 ? `${Math.floor(intervalSec / 3600)}h ${Math.floor((intervalSec % 3600) / 60)}m` : intervalSec >= 60 ? `${Math.floor(intervalSec / 60)}m ${intervalSec % 60}s` : `${intervalSec}s`}</span>
+          <span className="text-blue-400">{formatInterval(intervalSec)}</span>
         </label>
         <input
           type="range"
-          min="5"
-          max="86400"
-          step={intervalSec >= 3600 ? 300 : intervalSec >= 600 ? 60 : 5}
-          value={intervalSec}
-          onChange={(e) => updateConfig(widget.i, "intervalSec", parseInt(e.target.value))}
+          min={0}
+          max={IMAGE_STOPS.length - 1}
+          step={1}
+          value={nearestStopIndex(IMAGE_STOPS, intervalSec)}
+          onChange={(e) => updateConfig(widget.i, "intervalSec", IMAGE_STOPS[Number(e.target.value)])}
           className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-blue-500 bg-[var(--mf-elev)]/10"
         />
       </div>

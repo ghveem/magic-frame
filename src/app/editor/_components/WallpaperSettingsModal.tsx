@@ -5,6 +5,10 @@ import { X, FolderSync, RefreshCw, Music } from 'lucide-react';
 import type { WallpaperConfig } from '../_types';
 import { useT } from "@/lib/i18n/LocaleProvider";
 import HAEntityInput from './HAEntityInput';
+import { formatInterval, intervalStops, nearestStopIndex } from "@/lib/ui/intervalStops";
+
+// Regler-Stufen, siehe intervalStops.ts — Mindestwert wie bisher.
+const WALLPAPER_STOPS = intervalStops(10);
 
 export type ImmichAlbum = { id: string; albumName: string; assetCount: number };
 export type ImmichPerson = { id: string; name: string; thumbnailUrl: string };
@@ -511,13 +515,12 @@ export default function WallpaperSettingsModal({
                 <div>
                    <label className="text-sm font-medium text-[var(--mf-fg)]/80 mb-2 flex justify-between">
                       <span>{t("Bildwechsel Intervall")}</span>
-                      <span className="text-blue-400">{wallpaper.intervalSec >= 3600 ? `${Math.floor(wallpaper.intervalSec / 3600)}h ${Math.floor((wallpaper.intervalSec % 3600) / 60)}m` : wallpaper.intervalSec >= 60 ? `${Math.floor(wallpaper.intervalSec / 60)}m ${wallpaper.intervalSec % 60}s` : `${wallpaper.intervalSec}s`}</span>
+                      <span className="text-blue-400">{formatInterval(wallpaper.intervalSec ?? 60)}</span>
                    </label>
                    <input
-                      type="range" min="10" max="86400"
-                      step={wallpaper.intervalSec >= 3600 ? 300 : wallpaper.intervalSec >= 600 ? 60 : 10}
-                      value={wallpaper.intervalSec}
-                      onChange={(e) => setWallpaper({ ...wallpaper, intervalSec: parseInt(e.target.value) })}
+                      type="range" min={0} max={WALLPAPER_STOPS.length - 1} step={1}
+                      value={nearestStopIndex(WALLPAPER_STOPS, wallpaper.intervalSec ?? 60)}
+                      onChange={(e) => setWallpaper({ ...wallpaper, intervalSec: WALLPAPER_STOPS[Number(e.target.value)] })}
                       className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-blue-500 bg-[var(--mf-elev)]/10"
                    />
                 </div>

@@ -587,7 +587,7 @@ export const EN: Record<string, string> = {
   "Ladekreis (Timer) anzeigen": "Show loading ring (timer)",
   "Der Ring läuft stufenlos und hält den Browser dabei durchgehend am Zeichnen — auf einer sonst ruhigen Ansicht kostet das rund ein Drittel eines Prozessorkerns. Ausschalten spart das komplett. Auf Wandtablets, Pi-Displays und Fernsehern merkt man das an Wärme und Stromverbrauch.":
     "The ring sweeps continuously, which keeps the browser drawing the whole time — on an otherwise idle view that costs about a third of a CPU core. Turning it off saves all of it. On wall tablets, Pi displays and TVs you notice it as heat and power draw.",
-  "Bildwechsel Intervall (Sekunden)": "Image change interval (seconds)",
+  "Bildwechsel Intervall": "Image change interval",
   "Schatten Oben": "Shadow top",
   "Schatten Unten": "Shadow bottom",
   "Vignette Effekt": "Vignette effect",

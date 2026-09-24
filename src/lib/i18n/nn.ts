@@ -586,7 +586,7 @@ export const NN: Record<string, string> = {
   "Ladekreis (Timer) anzeigen": "Vis lastesirkel (tidtakar)",
   "Der Ring läuft stufenlos und hält den Browser dabei durchgehend am Zeichnen — auf einer sonst ruhigen Ansicht kostet das rund ein Drittel eines Prozessorkerns. Ausschalten spart das komplett. Auf Wandtablets, Pi-Displays und Fernsehern merkt man das an Wärme und Stromverbrauch.":
     "Ringen går jamt og held nettlesaren i konstant teikning — på ei elles roleg vising kostar det omtrent ein tredjedel av ein prosessorkjerne. Å skru han av sparer alt dette. På veggnettbrett, Pi-skjermar og TV-ar merkast det som varme og straumforbruk.",
-  "Bildwechsel Intervall (Sekunden)": "Biletbyte-intervall (sekund)",
+  "Bildwechsel Intervall": "Biletbyte-intervall",
   "Schatten Oben": "Skugge øvst",
   "Schatten Unten": "Skugge nedst",
   "Vignette Effekt": "Vignetteffekt",
