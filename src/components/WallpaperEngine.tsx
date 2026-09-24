@@ -201,13 +201,18 @@ export default function WallpaperEngine({
   // unverändert. Sonst übernimmt <SplitSlideshow> Frame-Bildung + Crossfade.
   const splitMode = (config?.splitMode as string) || "off";
 
+  // advanceSignal steht in den Abhängigkeiten, damit ein Weiterschalten von
+  // aussen (Home Assistant, /api/devices/next-wallpaper) das Intervall neu
+  // startet. Sonst käme das nächste automatische Bild zum alten Takt — unter
+  // Umständen Sekunden nach dem manuellen, während der Ring (am Bild
+  // festgemacht) schon wieder die volle Zeit anzeigt.
   useEffect(() => {
     if (!isReady || images.length <= 1 || splitMode !== "off") return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
     }, intervalMs);
     return () => clearInterval(interval);
-  }, [isReady, images.length, intervalMs, splitMode]);
+  }, [isReady, images.length, intervalMs, splitMode, advanceSignal]);
 
   const advanceRef = useRef(advanceSignal);
   useEffect(() => {
@@ -336,6 +341,7 @@ export default function WallpaperEngine({
           meta={metaOptions}
           durationMs={transitionMs}
           intervalMs={intervalMs}
+          advanceSignal={advanceSignal}
         />
       ) : transition === "kenburns" ? (
         <KenBurnsSlot
@@ -790,6 +796,7 @@ function SplitSlideshow({
   meta,
   durationMs,
   intervalMs,
+  advanceSignal = 0,
 }: {
   images: WallpaperData[];
   mode: SplitMode;
@@ -798,6 +805,8 @@ function SplitSlideshow({
   meta?: MetaOptions;
   durationMs: number;
   intervalMs: number;
+  /** Zählt hoch, wenn von aussen weitergeschaltet wird — wie im Einzelbild-Pfad. */
+  advanceSignal?: number;
 }) {
   const frames = useMemo(() => buildFrames(images, mode), [images, mode]);
   const [idx, setIdx] = useState(0);
@@ -820,7 +829,17 @@ function SplitSlideshow({
     if (frames.length <= 1) return;
     const t = setInterval(() => setIdx((p) => (p + 1) % frames.length), intervalMs);
     return () => clearInterval(t);
-  }, [frames.length, intervalMs]);
+  }, [frames.length, intervalMs, advanceSignal]);
+
+  // Weiterschalten von aussen: nächster Frame, und über die Abhängigkeit oben
+  // startet das Intervall neu. Ohne das tat /api/devices/next-wallpaper in der
+  // Split-Ansicht gar nichts — der Einzelbild-Index wird hier nicht benutzt.
+  const splitAdvanceRef = useRef(advanceSignal);
+  useEffect(() => {
+    if (advanceSignal === splitAdvanceRef.current) return;
+    splitAdvanceRef.current = advanceSignal;
+    if (frames.length > 1) setIdx((p) => (p + 1) % frames.length);
+  }, [advanceSignal, frames.length]);
 
   // Crossfade: alle Bilder des neuen Frames vorladen, dann in den inaktiven
   // Slot mounten und nach zwei rAF aktiv schalten.
