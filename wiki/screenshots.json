@@ -27,7 +27,7 @@
       ],
       "takenAt": {
         "src/app/view/[id]/page.tsx": "e8fa619b8204",
-        "src/components/WallpaperEngine.tsx": "1fce35dc47d8"
+        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
       }
     },
     {
@@ -76,7 +76,7 @@
         }
       ],
       "takenAt": {
-        "src/components/widgets/WeatherWidget.tsx": "2a0b2267c43a",
+        "src/components/widgets/WeatherWidget.tsx": "6bd4d969826e",
         "src/lib/weather/wmo.tsx": "6bae30d7dc8c"
       }
     },
@@ -484,7 +484,7 @@
         }
       ],
       "takenAt": {
-        "src/components/WallpaperEngine.tsx": "1fce35dc47d8"
+        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
       }
     },
     {
@@ -509,7 +509,7 @@
       ],
       "takenAt": {
         "src/app/view/[id]/page.tsx": "e8fa619b8204",
-        "src/components/WallpaperEngine.tsx": "1fce35dc47d8"
+        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
       }
     },
     {
@@ -1059,7 +1059,7 @@
         }
       ],
       "takenAt": {
-        "src/components/WallpaperEngine.tsx": "1fce35dc47d8"
+        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
       }
     },
     {
@@ -1079,7 +1079,7 @@
         }
       ],
       "takenAt": {
-        "src/components/WallpaperEngine.tsx": "1fce35dc47d8"
+        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
       }
     },
     {
@@ -1100,7 +1100,7 @@
         }
       ],
       "takenAt": {
-        "src/components/WallpaperEngine.tsx": "1fce35dc47d8",
+        "src/components/WallpaperEngine.tsx": "60f28addeeaa",
         "src/app/view/[id]/page.tsx": "e8fa619b8204"
       }
     },
@@ -1223,7 +1223,7 @@
         }
       ],
       "takenAt": {
-        "src/components/widgets/WeatherWidget.tsx": "2a0b2267c43a"
+        "src/components/widgets/WeatherWidget.tsx": "6bd4d969826e"
       }
     },
     {
