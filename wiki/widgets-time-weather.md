@@ -110,7 +110,8 @@ the layout does not move.
 
 `hideForecast` removes the forecast row and leaves only the current conditions —
 useful in a narrow tile. `showHumidity`, `showWind`, `showUv` and `showSunTimes`
-each add one value.
+each add one value. `showFeelsLike` switched off hides the "Feels like" line
+under the temperature; it is on unless you turn it off.
 
 `weatherBg` paints a soft atmospheric background behind the widget that follows
 the current conditions — it changes with the weather rather than staying put.

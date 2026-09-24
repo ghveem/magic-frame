@@ -23,6 +23,7 @@ view.
 | Add or tick off a task | `POST /api/todos`, `PATCH /api/todos/[id]` |
 | Make every screen show one view | `POST /api/devices/navigate` |
 | Reload every screen after a change | `POST /api/devices/refresh` |
+| Show the next wallpaper picture now | `POST /api/devices/next-wallpaper` |
 | Read the weather or the calendar my screens use | `GET /api/weather`, `GET /api/calendar` |
 
 The four data areas — timers, messages, shopping list, to-dos — are the same
@@ -258,15 +259,16 @@ and then does nothing. The token may stay in the query; the `toggle` may not.
 
 ## Controlling the displays
 
-Three endpoints push a command to every display currently connected.
+Four endpoints push a command to every display currently connected.
 
 | Call | What happens on the displays |
 | --- | --- |
 | `POST /api/devices/refresh` | They reload the page |
 | `POST /api/devices/navigate` | They all switch to one view |
 | `POST /api/devices/clear-navigate` | They go back to their own view |
+| `POST /api/devices/next-wallpaper` | Their wallpaper moves on to the next picture |
 
-All three need a login and answer `{ "ok": true }`.
+All four need a login and answer `{ "ok": true }`.
 
 `refresh` takes an optional `dashboardId`, in the query or in a JSON body. With
 it, only the displays showing that view reload; without it, every display does.
@@ -274,6 +276,20 @@ it, only the displays showing that view reload; without it, every display does.
 
 ```
 POST /api/devices/navigate?key=YOUR_TOKEN&dashboardId=kitchen
+```
+
+`next-wallpaper` takes the same optional `dashboardId` as `refresh`. The
+countdown starts over with the new picture, so a view set to change once a day
+and advanced by an automation at seven keeps a full day per picture instead of
+changing again at some random hour. It works in single-picture and split view
+alike and leaves Image widgets alone. From Home Assistant, a `rest_command`
+does it:
+
+```yaml
+rest_command:
+  magic_frame_next_wallpaper:
+    url: "http://<your-server>/api/devices/next-wallpaper?dashboardId=kitchen&key=YOUR_TOKEN"
+    method: POST
 ```
 
 This is the same machinery as the buttons in the editor toolbar: **TV sync**

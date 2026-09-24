@@ -27,7 +27,7 @@ photo beside the calendar rather than under it.
    album list fills with your albums, each showing its photo count.
 4. Pick an album under **Album**.
 5. Choose a **Image display** (`Bildanzeige`) mode — see the table below.
-6. Set the **Image change interval**, 5–600 seconds. Default 30.
+6. Set the **Image change interval**, 5 seconds to 24 hours. Default 30.
 
 If the album list stays empty, the message under it says which end is missing:
 Immich not configured globally, or no Immich set on this view's wallpaper.
@@ -39,7 +39,7 @@ Immich not configured globally, or no Immich set on this view's wallpaper.
 | `immichSource` | `global` | `global` uses the Immich connection from `Editor → Integrations`; `view` uses the one configured in this view's own wallpaper, which can be a different server. |
 | `immichAlbumId` | — | Which album to show. |
 | `fit` | `cover` | How the photo fills the tile — see below. |
-| `intervalSec` | 30 | Seconds per photo, minimum 5. |
+| `intervalSec` | 30 | Seconds per photo, 5 to 86400 (24 hours). |
 | `cornerRadius` | 16 px | Rounded corners on the photo, 0–40 px. 0 is square. In a view running edge-to-edge the corners go square by themselves unless you set a value here. |
 
 ### The fit modes

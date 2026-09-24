@@ -97,10 +97,15 @@ As with Immich, the pictures are passed through Magic Frame
 
 ### How often the picture changes
 
-**Bildwechsel Intervall** (Change interval) sets the seconds each picture stays
-up: 10 to 3600 (one hour), in steps of ten. It appears for the bundled, WebDAV,
-Immich and generated sources, and not for a solid colour or a fixed URL, where
-there is nothing to change to.
+**Bildwechsel Intervall** (Image change interval) sets how long each picture
+stays up: from 10 seconds to 24 hours, in round steps — seconds at the short
+end, hours at the long end. It appears for the bundled, WebDAV, Immich and
+generated sources, and not for a solid colour or a fixed URL, where there is
+nothing to change to.
+
+To change the picture on a schedule of your own — every morning at seven, say
+— set a long interval and advance it from Home Assistant with
+[`next-wallpaper`](companion-api.md#controlling-the-displays).
 
 A new view is created at 45 seconds. A view where the value was never stored
 runs at 60.
