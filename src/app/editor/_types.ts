@@ -25,6 +25,7 @@ export interface WidgetLayoutItem {
   showHumidity?: boolean;
   showWind?: boolean;
   showUv?: boolean;
+  showFeelsLike?: boolean;
   unitWind?: 'kmh' | 'mph' | 'ms' | 'kn';
     subtextSize?: number;
     forecastLayout?: 'horizontal' | 'vertical';

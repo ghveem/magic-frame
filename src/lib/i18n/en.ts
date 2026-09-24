@@ -613,6 +613,7 @@ export const EN: Record<string, string> = {
   "Lade Wetter…": "Loading weather…",
   "Jetzt": "Now",
   "Fühlt sich an wie": "Feels like",
+  "Gefühlte Temperatur anzeigen": "Show feels-like temperature",
   "Kalender konnte nicht geladen werden": "Calendar could not be loaded",
   "Bitte Kalender-URL(s) im Editor hinterlegen": "Please add calendar URL(s) in the editor",
   "Kalender wird gesammelt...": "Collecting calendar…",

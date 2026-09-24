@@ -563,6 +563,17 @@ export default function WeatherInspector({
 
            <div>
              <label className="text-sm font-medium text-[var(--mf-fg)]/80 block mb-2 text-blue-400">{t("Infozeile „Fühlt sich an wie…\"")}</label>
+             {/* #109. Größe, Deckkraft und Schreibweise darunter bleiben sichtbar:
+                 sie gelten auch für die Zeile mit Feuchte/Wind/UV. */}
+             <label className="flex items-center gap-2 cursor-pointer text-xs text-[var(--mf-fg)]/70 hover:text-[var(--mf-fg)] mb-3">
+                <input
+                   type="checkbox"
+                   checked={(activeWidget.config as any)?.showFeelsLike !== false}
+                   onChange={(e) => updateConfig(activeWidget.i, 'showFeelsLike', e.target.checked)}
+                   className="appearance-none w-4 h-4 border border-[var(--mf-bdr)]/20 rounded bg-[var(--mf-surface)] checked:bg-blue-500 checked:border-blue-500"
+                />
+                {t("Gefühlte Temperatur anzeigen")}
+             </label>
              <div className="grid grid-cols-2 gap-3">
                 <div>
                    <label className="text-xs font-medium text-[var(--mf-fg)]/60 flex justify-between mb-1.5">

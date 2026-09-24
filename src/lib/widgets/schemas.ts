@@ -95,6 +95,8 @@ const weatherConfig = baseConfig.extend({
   showWind: z.boolean().optional(),
   showUv: z.boolean().optional(),
   showSunTimes: z.boolean().optional(),
+  // #109: Zeile „Fühlt sich an wie" ausblenden. Ohne Angabe sichtbar.
+  showFeelsLike: z.boolean().optional(),
   subtextSize: z.number().optional(),
   statsSize: z.number().optional(),
   unitTemp: z.enum(["celsius", "fahrenheit"]).optional(),

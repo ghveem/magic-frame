@@ -184,6 +184,8 @@ export default function WeatherWidget({ config, location, lat, lon }: { config?:
   const windUnitLabel = unitWind === "mph" ? "mph" : unitWind === "ms" ? "m/s" : unitWind === "kn" ? "kn" : "km/h";
   const currentTemp = Math.round(data.current.temperature_2m);
   const feelsLike = Math.round(data.current.apparent_temperature);
+  // #109: die Zeile „Fühlt sich an wie" lässt sich ausblenden. Default an.
+  const showFeelsLike = config?.showFeelsLike !== false;
   const currentCode = data.current.weather_code;
   const humidity = data.current.relative_humidity_2m;
   const windSpeed = data.current.wind_speed_10m;
@@ -327,12 +329,14 @@ export default function WeatherWidget({ config, location, lat, lon }: { config?:
              {wmoToIcon(currentCode, !isNight, config?.iconSet, { style: config?.meteoconsStyle, animated: config?.meteoconsAnimated, moonPhase: (config?.meteoconsMoonPhase ?? true) ? moonPhaseFraction(new Date(nowTick)) : undefined })}
           </div>
         </div>
-        <div
-           style={{ fontSize: `${subtextSizeEm}em`, opacity: subtextOpacity }}
-           className={`mt-[0.5em] ${subtextUppercase ? "uppercase" : ""} ${subtextTrackingClass} text-ellipsis whitespace-nowrap overflow-hidden`}
-        >
-          {t("Fühlt sich an wie")} {feelsLike}{tempSuffix}
-        </div>
+        {showFeelsLike && (
+          <div
+             style={{ fontSize: `${subtextSizeEm}em`, opacity: subtextOpacity }}
+             className={`mt-[0.5em] ${subtextUppercase ? "uppercase" : ""} ${subtextTrackingClass} text-ellipsis whitespace-nowrap overflow-hidden`}
+          >
+            {t("Fühlt sich an wie")} {feelsLike}{tempSuffix}
+          </div>
+        )}
         {/* Stats-Zeile separat — darf auf neue Zeile umbrechen wenn Widget
             schmal/groß ist (zB große Hauptansicht). Vorher in der Subtext-Zeile
             mit whitespace-nowrap → wurde abgeschnitten. Eigener statsSize-Slider,
