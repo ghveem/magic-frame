@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   description:
     "Magic Frame – smart-display dashboard for tablets and TVs with Home Assistant, weather and calendar widgets.",
   applicationName: "Magic Frame",
+  manifest: "/api/manifest",
   appleWebApp: {
     capable: true,
     title: "Magic Frame",
