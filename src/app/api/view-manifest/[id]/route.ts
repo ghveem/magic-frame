@@ -1,17 +1,24 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { viewName } from "@/lib/views/viewName";
+
+// Der Name kann sich jederzeit ändern — nie zwischenspeichern.
+export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
+  // Beschriftung unter dem Symbol: der Name der Ansicht, nicht ihr
+  // Adress-Kürzel. Siehe viewName.ts.
+  const name = await viewName(id);
 
   return NextResponse.json(
     {
-      name: "Magic Frame",
-      short_name: id,
+      name: name ? `${name} · Magic Frame` : "Magic Frame",
+      short_name: name ?? "Magic Frame",
       description: "Magic Frame – smart-display dashboard",
-      start_url: `/view/${id}`,
+      start_url: `/view/${encodeURIComponent(id)}`,
       scope: "/",
       display: "standalone",
       orientation: "any",

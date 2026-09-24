@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { viewName } from "@/lib/views/viewName";
 
 export async function generateMetadata({
   params,
@@ -6,12 +7,16 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
+  const name = await viewName(id);
   return {
-    title: `${id} · Magic Frame`,
-    manifest: `/api/view-manifest/${id}`,
+    // Die Vorlage im Root-Layout hängt „ · Magic Frame" selbst an — ohne
+    // Namen darum absolut, sonst stünde „Magic Frame · Magic Frame" da.
+    title: name ?? { absolute: "Magic Frame" },
+    manifest: `/api/view-manifest/${encodeURIComponent(id)}`,
     appleWebApp: {
       capable: true,
-      title: `Magic Frame – ${id}`,
+      // Beschriftung unter dem Symbol auf iOS: kurz halten, nur der Name.
+      title: name ?? "Magic Frame",
       statusBarStyle: "black-translucent",
     },
   };
