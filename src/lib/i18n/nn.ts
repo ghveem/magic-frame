@@ -612,6 +612,7 @@ export const NN: Record<string, string> = {
   "Lade Wetter…": "Lastar vêr…",
   "Jetzt": "No",
   "Fühlt sich an wie": "Kjennest ut som",
+  "Gefühlte Temperatur anzeigen": "Vis følt temperatur",
   "Kalender konnte nicht geladen werden": "Kalenderen kunne ikkje lastast",
   "Bitte Kalender-URL(s) im Editor hinterlegen": "Legg inn kalender-URL(ar) i editoren",
   "Kalender wird gesammelt...": "Samlar kalender…",
