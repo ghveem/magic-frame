@@ -4,6 +4,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { Droplets, Wind, Sunrise, Sunset, Sun } from "lucide-react";
 import { wmoToIcon, uvToMeteoconName, windToBeaufortMeteoconName, moonPhaseFraction } from "@/lib/weather/wmo";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { intlLocale } from "@/lib/i18n/date-locale";
 
 const clampN = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
@@ -90,7 +91,7 @@ export default function WeatherWidget({ config, location, lat, lon }: { config?:
   // en-US → 12-hour clock with AM/PM (sunrise/sunset), US weekday format
   // ("Tue"). de-DE → 24-hour, German weekday ("Di."). Matches what
   // ClockWidget does so the whole dashboard reads consistently.
-  const dateLocale = locale === "en" ? "en-US" : "de-DE";
+  const dateLocale = intlLocale(locale);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 

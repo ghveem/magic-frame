@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Droplets, Wind, Sun } from "lucide-react";
 import { wmoToIcon, wmoToText, moonPhaseFraction } from "@/lib/weather/wmo";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { intlLocale } from "@/lib/i18n/date-locale";
 
 export default function ClockWidget({ config }: { config?: any }) {
   const { locale, t } = useLocale();
@@ -12,7 +13,7 @@ export default function ClockWidget({ config }: { config?: any }) {
   // unitTemp / unitWind on the Weather widget. Settings:
   //   timeFormat: "auto" | "12h" | "24h"
   //   dateFormat: "auto" | "en-US" | "en-GB" | "de-DE"
-  const localeBased = locale === "en" ? "en-US" : "de-DE";
+  const localeBased = intlLocale(locale);
   const dateLocale: string = (() => {
     const f = config?.dateFormat;
     if (f === "en-US" || f === "en-GB" || f === "de-DE") return f;

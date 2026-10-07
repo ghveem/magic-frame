@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { connectLiveSync } from "@/lib/live-socket";
 import { MessageSquare, X } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { de, enUS } from "date-fns/locale";
+import { dateFnsLocale } from "@/lib/i18n/date-locale";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { writeAndReport } from "@/lib/ha/action-client";
 
@@ -94,7 +94,7 @@ export default function MessagesWidget({
           <div className="flex-1 min-w-0">
             <div className="text-[0.9em] leading-snug break-words">{m.text}</div>
             <div className="text-[0.65em] opacity-50 mt-[0.2em]">
-              {formatDistanceToNow(new Date(m.createdAt), { addSuffix: true, locale: locale === "en" ? enUS : de })}
+              {formatDistanceToNow(new Date(m.createdAt), { addSuffix: true, locale: dateFnsLocale(locale) })}
             </div>
           </div>
           <button

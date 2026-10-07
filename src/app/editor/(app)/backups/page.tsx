@@ -14,7 +14,7 @@ import {
   Camera,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { de, enUS } from "date-fns/locale";
+import { dateFnsLocale } from "@/lib/i18n/date-locale";
 import { useT, useLocale } from "@/lib/i18n/LocaleProvider";
 
 type Snapshot = {
@@ -402,7 +402,7 @@ function SnapshotsList({
                 </div>
                 <div className="text-[11px] text-[var(--mf-fg)]/40">
                   {s.widgetCount} {t("Widgets")} ·{" "}
-                  {formatDistanceToNow(new Date(s.createdAt), { addSuffix: true, locale: locale === "en" ? enUS : de })}
+                  {formatDistanceToNow(new Date(s.createdAt), { addSuffix: true, locale: dateFnsLocale(locale) })}
                 </div>
               </div>
               <button
