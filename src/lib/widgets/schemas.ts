@@ -49,7 +49,7 @@ const clockConfig = baseConfig.extend({
   timeFormat: z.enum(["auto", "12h", "24h"]).optional(),
   // "auto" follows the App locale (en → en-US, de → de-DE). Explicit picks
   // for users who want a specific regional format.
-  dateFormat: z.enum(["auto", "en-US", "en-GB", "de-DE"]).optional(),
+  dateFormat: z.enum(["auto", "en-US", "en-GB", "de-DE", "pt-BR"]).optional(),
   showMiniWeather: z.boolean().optional(),
   // #81: Datenquelle der Mini-Anzeige. Ohne Angabe Open-Meteo — wie bisher.
   provider: z.enum(["open-meteo", "dwd", "openweathermap"]).optional(),

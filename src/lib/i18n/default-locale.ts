@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/companion/prisma";
+import { isLocale, type Locale } from "./locales";
 
 // Server-side default locale for this Magic Frame instance.
 // Stored at AppSettings.extra.defaultLocale.
@@ -10,7 +11,7 @@ import { prisma } from "@/lib/companion/prisma";
 // every fresh browser inherits — the strict-EN fallback in LocaleProvider
 // only kicks in when neither localStorage nor a server default exists.
 
-export type DefaultLocale = "de" | "en" | "nb" | "nn";
+export type DefaultLocale = Locale;
 
 async function readExtra(): Promise<any> {
   try {
@@ -30,7 +31,7 @@ async function readExtra(): Promise<any> {
 export async function getDefaultLocale(): Promise<DefaultLocale | null> {
   const extra = await readExtra();
   const stored = extra?.defaultLocale;
-  if (stored === "de" || stored === "en" || stored === "nb" || stored === "nn") return stored;
+  if (isLocale(stored)) return stored;
   return null;
 }
 
@@ -42,7 +43,7 @@ export async function setDefaultLocale(
 ): Promise<void> {
   const extra = await readExtra();
   const next = { ...extra };
-  if (locale === "de" || locale === "en" || locale === "nb" || locale === "nn") {
+  if (isLocale(locale)) {
     next.defaultLocale = locale;
   } else {
     delete next.defaultLocale;

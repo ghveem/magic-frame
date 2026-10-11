@@ -97,6 +97,8 @@ export const EN: Record<string, string> = {
   "schwach": "weak",
   "Auf diesem Gerät abmelden": "Sign out on this device",
   "Sprache": "Language",
+  "Portugiesisch (Brasilien)": "Portuguese (Brazil)",
+  "Portugiesisch (ter., 27 de mai.)": "Brazilian Portuguese (ter., 27 de mai.)",
   "Sprache der Editor-Oberfläche. Wird lokal gespeichert.":
     "Language of the editor interface. Stored locally.",
   "Sprache der Oberfläche. Pro Browser merkbar + als Default für alle Displays gespeichert.":

@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { getAppSettings } from '@/lib/settings/store';
+import { intlDateLocale } from '@/lib/i18n/locales';
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
@@ -229,7 +230,7 @@ export async function GET(req: NextRequest) {
      // "May 27, 2026" for English and "27. Mai 2026" for German, so the
      // photo metadata under the wallpaper reads the same as the rest of
      // the dashboard.
-     const dateLocale = req.nextUrl.searchParams.get('lang') === 'en' ? 'en-US' : 'de-DE';
+     const dateLocale = intlDateLocale(req.nextUrl.searchParams.get('lang'));
      const dashboard = await prisma.dashboard.findUnique({ where: { id: dashboardId } });
      if (!dashboard || !dashboard.wallpaper) return new NextResponse("Not Found", { status: 404 });
      const wp = dashboard.wallpaper as any;

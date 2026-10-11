@@ -241,7 +241,7 @@ function LanguageCard() {
   // server. Every other display that hasn't picked its own language yet
   // will inherit this on next load — that's how the kitchen monitor
   // catches up with what you set in the editor on your laptop.
-  const pick = (l: "de" | "en" | "nb" | "nn") => {
+  const pick = (l: "de" | "en" | "nb" | "nn" | "pt-BR") => {
     setLocale(l);
     fetch("/api/admin/locale-default", {
       method: "POST",
@@ -258,7 +258,7 @@ function LanguageCard() {
       title="Sprache"
       desc="Sprache der Oberfläche. Pro Browser merkbar + als Default für alle Displays gespeichert."
     >
-      <div className="inline-flex rounded-lg bg-[var(--mf-ovl)]/40 light:bg-[var(--mf-surface)] border border-[var(--mf-bdr)]/10 p-0.5">
+      <div className="inline-flex flex-wrap rounded-lg bg-[var(--mf-ovl)]/40 light:bg-[var(--mf-surface)] border border-[var(--mf-bdr)]/10 p-0.5">
         <button
           onClick={() => pick("de")}
           className={`px-4 h-9 rounded-md text-sm font-medium transition-colors ${
@@ -290,6 +290,14 @@ function LanguageCard() {
           }`}
         >
           {t("Norwegisch (Nynorsk)")}
+        </button>
+        <button
+          onClick={() => pick("pt-BR")}
+          className={`px-4 h-9 rounded-md text-sm font-medium transition-colors ${
+            locale === "pt-BR" ? "bg-[var(--mf-elev)]/15 text-[var(--mf-fg)]" : "text-[var(--mf-fg)]/50 hover:text-[var(--mf-fg)]"
+          }`}
+        >
+          Português (Brasil)
         </button>
       </div>
     </Card>

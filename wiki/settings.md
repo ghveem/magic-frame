@@ -77,10 +77,12 @@ token. [Users and security](users-and-security.md) lists both sides in full.
 
 *Allgemein.* One card: **Language** (*Sprache*).
 
-Four buttons: **German**, **English**, **Norwegian (Bokmål)** and **Norwegian
-(Nynorsk)**. German is the language the interface is written in; English covers
+Five buttons: **German**, **English**, **Norwegian (Bokmål)**, **Norwegian
+(Nynorsk)** and **Português (Brasil)**. German is the language the interface is written in; English covers
 everything. The two Norwegian ones came from the community and fall back to
-English for anything not translated yet, never to German. Clicking one does two
+English for anything not translated yet, never to German. Brazilian Portuguese
+currently covers dates, times and weather labels, with English as the fallback
+for the rest of the interface. Clicking one does two
 separate things:
 
 1. It switches the language in **this browser** immediately, and remembers it

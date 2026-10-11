@@ -6,7 +6,8 @@ import {
   startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval,
   isSameMonth, differenceInCalendarDays, getISOWeek,
 } from "date-fns";
-import { de, enUS } from "date-fns/locale";
+import { dateFnsLocale } from "@/lib/i18n/date-locale";
+import { calendarWeekStartsOn, uses12HourClock } from "@/lib/i18n/locales";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useGlassStyle } from "@/lib/ui/glass";
 import { calendarOwnSurface } from "@/lib/widgets/calendar-surface";
@@ -56,7 +57,7 @@ const EMPTY_DAYS_FETCH_LIMIT = 60;
 
 export default function CalendarWidget({ config, dashboardId, onVisibilityChange }: { config?: any, dashboardId?: string, onVisibilityChange?: (isVisible: boolean) => void }) {
   const { locale, t } = useLocale();
-  const dfLocale = locale === "en" ? enUS : de;
+  const dfLocale = dateFnsLocale(locale);
   // Feeds-Array bevorzugen, Legacy icalUrl als Single-Feed fallback.
   const rawFeeds: FeedConfig[] = Array.isArray(config?.feeds)
     ? config.feeds.filter(isValidFeed)
@@ -93,7 +94,7 @@ export default function CalendarWidget({ config, dashboardId, onVisibilityChange
   const ownSurface = calendarOwnSurface(config);
 
   // Monatsgitter: sichtbares Fenster = ganze Wochen um den aktuellen Monat.
-  const weekStartsOn = locale === "en" ? 0 : 1; // So (EN) / Mo (DE)
+  const weekStartsOn = calendarWeekStartsOn(locale);
   const monthAnchor = startOfMonth(new Date());
   const gridStart = startOfWeek(monthAnchor, { weekStartsOn });
   const gridEnd = endOfWeek(endOfMonth(monthAnchor), { weekStartsOn });
@@ -432,10 +433,7 @@ export default function CalendarWidget({ config, dashboardId, onVisibilityChange
     // matching the Clock + Weather widgets. "12h"/"24h" is a fixed override.
     // Default "auto" keeps existing layouts exactly as before.
     const timeFmt = config?.calendarTimeFormat || "auto";
-    const timePattern =
-      timeFmt === "24h" ? "HH:mm"
-      : timeFmt === "12h" ? "h:mm a"
-      : locale === "en" ? "h:mm a" : "HH:mm";
+    const timePattern = uses12HourClock(locale, timeFmt) ? "h:mm a" : "HH:mm";
     const timeStr = ev.isAllDay
       ? t("Ganztägig")
       : format(startDate, timePattern);
@@ -519,10 +517,7 @@ export default function CalendarWidget({ config, dashboardId, onVisibilityChange
 
   // Gemeinsames Uhrzeit-Muster (auch für Agenda/Monat).
   const timeFmt = config?.calendarTimeFormat || "auto";
-  const timePattern =
-    timeFmt === "24h" ? "HH:mm"
-    : timeFmt === "12h" ? "h:mm a"
-    : locale === "en" ? "h:mm a" : "HH:mm";
+  const timePattern = uses12HourClock(locale, timeFmt) ? "h:mm a" : "HH:mm";
 
   // Neue Agenda (DAKboard-Stil): nach Tag gruppiert mit fetter Tages-Überschrift
   // (Heute / Morgen / Wochentag + Datum), darunter schlanke Zeilen.
@@ -545,7 +540,7 @@ export default function CalendarWidget({ config, dashboardId, onVisibilityChange
       const day = parseISO(`${key}T00:00:00`);
       const head = isToday(day) ? t("Heute")
         : isTomorrow(day) ? t("Morgen")
-        : format(day, "eee, d. MMM", { locale: dfLocale });
+        : format(day, locale === "pt-BR" ? "eee, d MMM" : "eee, d. MMM", { locale: dfLocale });
       const dayEvents = groups.get(key)!.slice(0, limit);
       return (
         <div key={key} className="mb-[0.9em]">
@@ -614,7 +609,7 @@ export default function CalendarWidget({ config, dashboardId, onVisibilityChange
         <div className="grid shrink-0 pb-[0.2em]" style={{ gridTemplateColumns: colsTemplate }}>
           {showWeekNumbers && (
             <div className="text-center uppercase tracking-wider font-medium" style={{ color: fgDim, fontSize: `${monthHeadPx * 0.85}px` }}>
-              {locale === "en" ? "Wk" : "KW"}
+              {locale === "pt-BR" ? "Sem." : locale === "en" ? "Wk" : "KW"}
             </div>
           )}
           {weekdayHead.map((d) => (

@@ -27,8 +27,8 @@ Shows the time and the date, and optionally a small weather line underneath.
 | Setting | What it does |
 | --- | --- |
 | `timezone` | Show another region's time. Empty = the display's own time zone. |
-| `timeFormat` | `auto`, `12h` or `24h`. `auto` follows the app language: English gives 12-hour, German 24-hour. |
-| `dateFormat` | `auto`, `en-US`, `en-GB` or `de-DE`. `auto` follows the app language. |
+| `timeFormat` | `auto`, `12h` or `24h`. `auto` follows the app language: English gives 12-hour, German and Brazilian Portuguese 24-hour. Explicit choices win over the language default. |
+| `dateFormat` | `auto`, `en-US`, `en-GB`, `de-DE` or `pt-BR`. `auto` follows the app language. Explicit regional choices remain in effect when the language changes. |
 | `hideSeconds` | Hide the seconds. Worth doing on a wall screen — a ticking second hand is movement you notice from across the room. |
 | `showMiniWeather` | Add a small weather line under the date. |
 

@@ -69,6 +69,7 @@ export default function ClockInspector({
                 <option value="de-DE">{t("Deutsch (Di., 27. Mai)")}</option>
                 <option value="en-US">{t("US-Englisch (Tue, May 27)")}</option>
                 <option value="en-GB">{t("UK-Englisch (Tue 27 May)")}</option>
+                <option value="pt-BR">{t("Portugiesisch (ter., 27 de mai.)")}</option>
              </select>
           </div>
        </div>
