@@ -21,6 +21,7 @@ import {
   ListChecks,
   Globe2,
   Apple,
+  Bot,
   ShieldCheck,
   Lock,
   AlertOctagon,
@@ -143,6 +144,7 @@ export default function SettingsPage() {
       render: () => (
         <>
           <ShortcutTokenCard />
+          <McpCard />
           <IOSCompanionCard />
           <ExternalIntegrationsHint />
         </>
@@ -470,6 +472,81 @@ function ShortcutTokenCard() {
             className="text-emerald-400 hover:underline"
           >
             wiki/companion-api.md
+          </a>
+        </p>
+      </div>
+    </Card>
+  );
+}
+
+/* ---------- MCP-Server für KI-Agenten ---------- */
+
+function McpCard() {
+  const t = useT();
+  const [copied, setCopied] = useState<"url" | "cmd" | null>(null);
+
+  const base =
+    typeof window !== "undefined" ? window.location.origin : "http://DEIN-DASHBOARD";
+  const url = `${base}/api/mcp`;
+  // Mit Platzhalter statt echtem Token: wer den Befehl in ein Forum oder ein
+  // Issue kopiert, um Hilfe zu bekommen, soll seinen Token nicht mitschicken.
+  // --scope user, weil Claude Code sonst nur in dem Ordner davon weiss, in dem
+  // der Befehl lief.
+  const command = `claude mcp add --scope user --transport http magic-frame ${url} --header "Authorization: Bearer TOKEN"`;
+
+  async function copy(which: "url" | "cmd", text: string) {
+    await navigator.clipboard.writeText(text);
+    setCopied(which);
+    setTimeout(() => setCopied(null), 1500);
+  }
+
+  const row = (which: "url" | "cmd", text: string) => (
+    <div className="flex items-start gap-2 bg-[var(--mf-ovl)]/40 light:bg-[var(--mf-surface)] border border-[var(--mf-bdr)]/10 rounded-lg px-3 py-2">
+      {/* Geist Mono zieht " --" per Ligatur zusammen, dann liest sich der
+          Befehl als "add--scope". Wer ihn abtippt, braucht jedes Leerzeichen. */}
+      <code className="flex-1 text-[11px] font-mono text-[var(--mf-fg)]/80 break-all leading-relaxed [font-variant-ligatures:none]">{text}</code>
+      <button
+        onClick={() => copy(which, text)}
+        className="text-xs text-[var(--mf-fg)]/70 hover:text-[var(--mf-fg)] bg-[var(--mf-elev)]/5 hover:bg-[var(--mf-elev)]/10 rounded-md px-2 h-7 flex items-center gap-1 shrink-0"
+      >
+        {copied === which ? <Check size={12} /> : <Copy size={12} />}
+        {copied === which ? t("kopiert") : t("Kopieren")}
+      </button>
+    </div>
+  );
+
+  return (
+    <Card
+      icon={<Bot size={18} />}
+      iconTint="indigo"
+      title="MCP-Server für KI-Agenten"
+      desc="KI-Agenten wie Claude bedienen Magic Frame über das Model Context Protocol: Ansichten lesen und umbauen, Notizen an die Wand schicken, Einkaufsliste und To-dos führen. Angemeldet wird mit dem Token oben."
+    >
+      <div className="space-y-3 text-xs text-[var(--mf-fg)]/60">
+        <div>
+          <div className="font-semibold text-[var(--mf-fg)]/80 mb-1">{t("Adresse")}</div>
+          {row("url", url)}
+        </div>
+        <div>
+          <div className="font-semibold text-[var(--mf-fg)]/80 mb-1">{t("Claude Code: im Terminal ausführen")}</div>
+          {row("cmd", command)}
+          <p className="text-[var(--mf-fg)]/40 mt-1.5">
+            {t("TOKEN durch den Token oben ersetzen. Andere MCP-Programme brauchen dieselben zwei Angaben: die Adresse und den Header Authorization: Bearer TOKEN.")}
+          </p>
+        </div>
+        <p>
+          {t("Ein Viewer-Token darf lesen und Haushaltsdinge erledigen: Notizen, Einkaufsliste, To-dos, Timer. Ansichten ändern und Displays steuern kann nur ein Admin-Token.")}
+        </p>
+        <p className="text-[var(--mf-fg)]/40">
+          {t("Die Claude-App und Home Assistant verbinden sich nur über OAuth, das kann Magic Frame noch nicht.")}{" "}
+          {t("Alle Werkzeuge:")}{" "}
+          <a
+            href="https://github.com/jeremiaa/magic-frame/blob/main/wiki/mcp.md"
+            target="_blank"
+            rel="noreferrer"
+            className="text-emerald-400 hover:underline"
+          >
+            wiki/mcp.md
           </a>
         </p>
       </div>

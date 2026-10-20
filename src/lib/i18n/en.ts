@@ -1451,6 +1451,20 @@ export const EN: Record<string, string> = {
   "Rotate": "Rotate",
   "Alle Endpoints, Socket-Events und Beispiele:": "All endpoints, socket events and examples:",
   "(im Repo).": "(in the repo).",
+
+  // Settings — MCP server card
+  "MCP-Server für KI-Agenten": "MCP server for AI agents",
+  "KI-Agenten wie Claude bedienen Magic Frame über das Model Context Protocol: Ansichten lesen und umbauen, Notizen an die Wand schicken, Einkaufsliste und To-dos führen. Angemeldet wird mit dem Token oben.":
+    "AI agents like Claude operate Magic Frame over the Model Context Protocol: read and rebuild views, put notes on the wall, keep the shopping list and to-dos. They sign in with the token above.",
+  "Adresse": "Address",
+  "Claude Code: im Terminal ausführen": "Claude Code: run in a terminal",
+  "TOKEN durch den Token oben ersetzen. Andere MCP-Programme brauchen dieselben zwei Angaben: die Adresse und den Header Authorization: Bearer TOKEN.":
+    "Replace TOKEN with the token above. Other MCP clients need the same two things: the address and the header Authorization: Bearer TOKEN.",
+  "Ein Viewer-Token darf lesen und Haushaltsdinge erledigen: Notizen, Einkaufsliste, To-dos, Timer. Ansichten ändern und Displays steuern kann nur ein Admin-Token.":
+    "A viewer's token can read and handle household things: notes, shopping list, to-dos, timers. Changing views and steering displays takes an admin's token.",
+  "Die Claude-App und Home Assistant verbinden sich nur über OAuth, das kann Magic Frame noch nicht.":
+    "The Claude app and Home Assistant only connect over OAuth, which Magic Frame cannot do yet.",
+  "Alle Werkzeuge:": "Every tool:",
   "Beispiel:": "Example:",
   "Nutze deine Todoist-Projekte als Quelle für Todos- und Einkaufslisten-Widgets. Setze einen API-Token (Todoist → Einstellungen → Integrationen → Entwickler → API-Token), danach erscheint Todoist im Quelle-Dropdown der Widgets.":
     "Use your Todoist projects as a source for to-do and shopping-list widgets. Set an API token (Todoist → Settings → Integrations → Developer → API token), then Todoist appears in the source dropdown of the widgets.",
