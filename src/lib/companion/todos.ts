@@ -76,6 +76,19 @@ export async function toggleTodo(id: string): Promise<TodoRecord | null> {
   return serialize(row);
 }
 
+// Wie setItemChecked: Zielzustand statt Umschalten, damit ein Agent, der
+// zweimal "erledigt" sagt, die Aufgabe nicht wieder öffnet.
+export async function setTodoDone(id: string, done: boolean): Promise<TodoRecord | null> {
+  const existing = await prisma.todo.findUnique({ where: { id } });
+  if (!existing) return null;
+  if (!!existing.completedAt === done) return serialize(existing);
+  const row = await prisma.todo.update({
+    where: { id },
+    data: { completedAt: done ? new Date() : null },
+  });
+  return serialize(row);
+}
+
 export async function updateTodo(id: string, patch: {
   title?: string;
   assignee?: string | null;

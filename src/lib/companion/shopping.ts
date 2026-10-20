@@ -58,6 +58,19 @@ export async function toggleItem(id: string): Promise<ShoppingRecord | null> {
   return serialize(row);
 }
 
+// Für Agenten: toggleItem zweimal gerufen nimmt den Haken wieder weg. Mit
+// Zielzustand bleibt ein wiederholter Aufruf harmlos.
+export async function setItemChecked(id: string, checked: boolean): Promise<ShoppingRecord | null> {
+  const existing = await prisma.shoppingItem.findUnique({ where: { id } });
+  if (!existing) return null;
+  if (existing.checked === checked) return serialize(existing);
+  const row = await prisma.shoppingItem.update({
+    where: { id },
+    data: { checked, checkedAt: checked ? new Date() : null },
+  });
+  return serialize(row);
+}
+
 export async function removeItem(id: string) {
   await prisma.shoppingItem.delete({ where: { id } });
 }
