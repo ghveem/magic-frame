@@ -11,7 +11,7 @@ summary for anyone who doesn't want to scroll through them.
 
 ## Shipping next
 
-Nothing sitting on the shelf — v1.5.0 just went out (see below). What's
+Nothing sitting on the shelf — v1.5.7 just went out (see below). What's
 coming next is the "Next up" list.
 
 ## Next up
@@ -37,7 +37,9 @@ opening or upvoting an issue is the best way to move it up.
   ([#25](https://github.com/jeremiaa/magic-frame/issues/25)) — and a Helm
   chart for Kubernetes ([#24](https://github.com/jeremiaa/magic-frame/issues/24))
 - **More UI languages** ([#13](https://github.com/jeremiaa/magic-frame/issues/13)), more weather providers ([#67](https://github.com/jeremiaa/magic-frame/issues/67)), smarter widget auto-fit ([#8](https://github.com/jeremiaa/magic-frame/issues/8))
-- **More wallpaper sources** — Synology Photos, Apple Photos shared albums
+- **More wallpaper sources** — Synology Photos (iCloud Shared Albums arrived in v1.5.6)
+- **The MCP server for the Claude apps and Home Assistant** — both sign in with
+  OAuth only, which the server does not offer yet
 - **Native companion app** — iOS first, beta via TestFlight
 - **Smoother view transitions**, compound visibility conditions, view templates
 
@@ -45,17 +47,14 @@ opening or upvoting an issue is the best way to move it up.
 
 The two most recent releases, so it's clear what no longer belongs above:
 
-- **v1.5.0** — CalDAV calendars ([#79](https://github.com/jeremiaa/magic-frame/pull/79) by @chimmidev), the
-  Home Assistant add-on grown up (sidebar entry with one-click sign-in, icon,
-  ingress), an [MCP server](wiki/companion-api.md) so agents can manage the
-  whole configuration, the camera going fullscreen on an HA trigger
-  ([#41](https://github.com/jeremiaa/magic-frame/issues/41)), state-based
-  notification colours ([#47](https://github.com/jeremiaa/magic-frame/issues/47)),
-  and a free-text heading widget ([#69](https://github.com/jeremiaa/magic-frame/issues/69)).
-- **v1.4.0** — the security round (closed database port, fail-closed auth,
-  an allowlist for `/api/ha/action`), the [wiki](wiki/README.md) — 28 pages
-  checked against the code in CI, with `llms.txt` for agents — and both
-  READMEs rebuilt around it.
+- **v1.5.7** — the [MCP server](wiki/mcp.md) made visible (a card under
+  Settings → Devices & apps, a wiki page of its own) and given the everyday
+  tools: notes on the wall, the shopping list, to-dos and timers.
+- **v1.5.6** — Brazilian Portuguese ([#119](https://github.com/jeremiaa/magic-frame/pull/119) by @leodabague),
+  Norwegian dates ([#117](https://github.com/jeremiaa/magic-frame/pull/117) by @ghveem), Todoist sections
+  ([#118](https://github.com/jeremiaa/magic-frame/pull/118) by @NiviJah), an iCloud Shared Album as wallpaper
+  ([#116](https://github.com/jeremiaa/magic-frame/pull/116) by @justinreeves00), and an https address for the
+  add-on's sidebar page ([#113](https://github.com/jeremiaa/magic-frame/issues/113)).
 
 ---
 
