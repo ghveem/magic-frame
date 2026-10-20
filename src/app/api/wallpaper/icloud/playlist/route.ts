@@ -8,6 +8,7 @@ import {
   parseIcloudSharedAlbumUrl,
   type IcloudPhoto,
 } from "@/lib/wallpaper-engine/icloud";
+import { intlDateLocale } from "@/lib/i18n/locales";
 
 const pool = new Pool({ connectionString: `${process.env.DATABASE_URL}` });
 const prisma = new PrismaClient({ adapter: new PrismaPg(pool) });
@@ -54,7 +55,7 @@ export async function GET(req: NextRequest) {
     const playlist = withDerivatives.slice(0, MAX_PLAYLIST).map(({ photo, checksum }) => {
       const width = Number(photo.width || 0);
       const height = Number(photo.height || 0);
-      const dateLocale = req.nextUrl.searchParams.get("lang") === "en" ? "en-US" : "de-DE";
+      const dateLocale = intlDateLocale(req.nextUrl.searchParams.get("lang"));
       let metadata: Record<string, string> | undefined;
       if (wp.showMetadata === true) {
         metadata = {};

@@ -434,6 +434,8 @@ const todosConfig = baseConfig
     listSource: z.enum(["local", "ha", "todoist"]).optional(),
     haListEntity: z.string().optional(),
     todoistProjectId: z.string().optional(),
+    // #118: Todoist-Abschnitte als Überschriften (nur bei listSource "todoist").
+    todoistGroupBySections: z.boolean().optional(),
   })
   .passthrough();
 
@@ -644,6 +646,8 @@ export const wallpaperSchema = z
   .object({
     source: z.string().optional(),
     query: z.string().optional(),
+    // source "icloud" (#116): öffentlicher Link eines geteilten iCloud-Albums.
+    icloudUrl: z.string().optional(),
     intervalSec: z.number().optional(),
     showMetadata: z.boolean().optional(),
     // Wie das Bild skaliert wird (issue #17). cover = Fill (default, croppt),

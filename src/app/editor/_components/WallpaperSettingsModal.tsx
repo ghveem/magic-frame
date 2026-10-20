@@ -120,7 +120,7 @@ export default function WallpaperSettingsModal({
                    <option value="url">{t("Feste Bild-URL")}</option>
                    <option value="webdav">{t("Lokaler NAS Ordner (WebDAV)")}</option>
                    <option value="immich">{t("Immich API (Album)")}</option>
-                   <option value="icloud">{t("iCloud Shared Album")}</option>
+                   <option value="icloud">{t("Geteiltes iCloud-Album")}</option>
                 </select>
              </div>
 
@@ -399,7 +399,7 @@ export default function WallpaperSettingsModal({
              ) : wallpaper.source === 'icloud' ? (
                 <div className="space-y-3">
                    <div>
-                      <label className="text-sm font-medium text-[var(--mf-fg)]/80 block mb-2">{t("Public iCloud Shared Album link")}</label>
+                      <label className="text-sm font-medium text-[var(--mf-fg)]/80 block mb-2">{t("Öffentlicher Link zum geteilten iCloud-Album")}</label>
                       <input
                          type="url" value={wallpaper.icloudUrl || ''}
                          onChange={(e) => setWallpaper({ ...wallpaper, icloudUrl: e.target.value })}
@@ -408,7 +408,7 @@ export default function WallpaperSettingsModal({
                       />
                    </div>
                    <p className="text-[11px] text-[var(--mf-fg)]/50 leading-relaxed">
-                      {t("Use the public link from the album’s Share menu. Anyone with the link can view its photos. iCloud links are handled by Apple’s public shared-album service.")}
+                      {t("Nimm den öffentlichen Link aus dem Teilen-Menü des Albums. Jeder mit dem Link kann die Fotos sehen. iCloud-Links laufen über Apples öffentlichen Dienst für geteilte Alben.")}
                    </p>
                 </div>
              ) : wallpaper.source === 'webdav' ? (
