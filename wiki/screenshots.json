@@ -27,7 +27,7 @@
       ],
       "takenAt": {
         "src/app/view/[id]/page.tsx": "e8fa619b8204",
-        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
+        "src/components/WallpaperEngine.tsx": "93291abbaf50"
       }
     },
     {
@@ -77,7 +77,7 @@
       ],
       "takenAt": {
         "src/components/widgets/WeatherWidget.tsx": "b7a751a53ba7",
-        "src/lib/weather/wmo.tsx": "ff23213bf43d"
+        "src/lib/weather/wmo.tsx": "9f33782c649f"
       }
     },
     {
@@ -125,7 +125,7 @@
       ],
       "element": ".react-grid-item",
       "takenAt": {
-        "src/components/widgets/CalendarWidget.tsx": "f2320636691f"
+        "src/components/widgets/CalendarWidget.tsx": "c7def3db3f6b"
       }
     },
     {
@@ -221,7 +221,7 @@
       ],
       "element": ".react-grid-item",
       "takenAt": {
-        "src/components/widgets/TodosWidget.tsx": "76c59ddadc49"
+        "src/components/widgets/TodosWidget.tsx": "5c69d65789b7"
       }
     },
     {
@@ -484,7 +484,7 @@
         }
       ],
       "takenAt": {
-        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
+        "src/components/WallpaperEngine.tsx": "93291abbaf50"
       }
     },
     {
@@ -509,7 +509,7 @@
       ],
       "takenAt": {
         "src/app/view/[id]/page.tsx": "e8fa619b8204",
-        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
+        "src/components/WallpaperEngine.tsx": "93291abbaf50"
       }
     },
     {
@@ -1059,7 +1059,7 @@
         }
       ],
       "takenAt": {
-        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
+        "src/components/WallpaperEngine.tsx": "93291abbaf50"
       }
     },
     {
@@ -1079,7 +1079,7 @@
         }
       ],
       "takenAt": {
-        "src/components/WallpaperEngine.tsx": "60f28addeeaa"
+        "src/components/WallpaperEngine.tsx": "93291abbaf50"
       }
     },
     {
@@ -1100,7 +1100,7 @@
         }
       ],
       "takenAt": {
-        "src/components/WallpaperEngine.tsx": "60f28addeeaa",
+        "src/components/WallpaperEngine.tsx": "93291abbaf50",
         "src/app/view/[id]/page.tsx": "e8fa619b8204"
       }
     },
