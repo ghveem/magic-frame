@@ -7,7 +7,8 @@ Assistant automation makes every display jump to the doorbell view.
 All of that goes through plain HTTP requests to the machine running Magic Frame.
 There is no app to install and nothing to sign up for. The usual clients are
 **iOS Shortcuts**, **Android Tasker**, Home Assistant's `rest_command`, and
-`curl` in a script.
+`curl` in a script. An AI agent such as Claude Code uses the same token through
+the built-in MCP server instead; that is on [Agents and MCP](mcp.md).
 
 A **view** is one screenful shown at one address (`/view/<id>`); its id is what
 the endpoints below call `dashboardId`. A **display** is any device showing a

@@ -834,7 +834,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
+        "src/app/editor/(app)/settings/page.tsx": "632120eb26bd"
       }
     },
     {
@@ -859,7 +859,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
+        "src/app/editor/(app)/settings/page.tsx": "632120eb26bd"
       }
     },
     {
@@ -884,7 +884,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
+        "src/app/editor/(app)/settings/page.tsx": "632120eb26bd"
       }
     },
     {
@@ -909,7 +909,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
+        "src/app/editor/(app)/settings/page.tsx": "632120eb26bd"
       }
     },
     {
@@ -934,7 +934,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
+        "src/app/editor/(app)/settings/page.tsx": "632120eb26bd"
       }
     },
     {
@@ -959,8 +959,40 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
+        "src/app/editor/(app)/settings/page.tsx": "632120eb26bd"
       }
+    },
+    {
+      "id": "mcp-settings-card",
+      "page": "mcp.md",
+      "caption": "The MCP server card in Settings: the address of the server with a Copy button, a ready-made command for Claude Code underneath, and a note on which tools a viewer token gets.",
+      "shows": [
+        "src/app/editor/(app)/settings/page.tsx"
+      ],
+      "steps": [
+        {
+          "goto": "/editor/settings"
+        },
+        {
+          "wait": 1200
+        },
+        {
+          "clickText": "Devices & apps"
+        },
+        {
+          "wait": 1500
+        },
+        {
+          "scrollTo": "text=\"MCP server for AI agents\""
+        },
+        {
+          "wait": 800
+        }
+      ],
+      "takenAt": {
+        "src/app/editor/(app)/settings/page.tsx": "632120eb26bd"
+      },
+      "element": "div.rounded-2xl:has(h2:text-is(\"MCP server for AI agents\"))"
     },
     {
       "id": "hosting-and-domain-ddns-card",
@@ -990,7 +1022,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
+        "src/app/editor/(app)/settings/page.tsx": "632120eb26bd"
       },
       "element": "div.rounded-2xl:has(h2:text-is(\"Dynamic DNS (DDNS)\"))"
     },

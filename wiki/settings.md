@@ -256,7 +256,7 @@ nothing for this card to configure. See
 
 ## 6. Devices & apps
 
-*Geräte & Apps.* Three cards. Despite the `#integrations` in its address, this
+*Geräte & Apps.* Four cards. Despite the `#integrations` in its address, this
 section is **not** where Home Assistant or Immich are connected.
 
 ### Companion API Token
@@ -278,6 +278,16 @@ it is accepted by `/api/timers`, `/api/messages`, `/api/shopping` and
 [The companion API](companion-api.md).
 
 **Each account has its own token**, and the token acts as that account.
+
+### MCP server for AI agents
+
+*MCP-Server für KI-Agenten.* The address of the built-in MCP server —
+`/api/mcp` on the address you opened the editor with — and a ready-made
+`claude mcp add` command for Claude Code, each with a **Copy** button. The
+command carries the placeholder `TOKEN`; put the token from the card above in
+its place. Underneath, the card says which tools a viewer's token gets and
+that OAuth-only clients cannot connect yet. Everything else is on
+[Agents and MCP](mcp.md).
 
 ### iOS Companion App
 

@@ -33,6 +33,8 @@ Magic Frame macht aus jedem Bildschirm mit Browser — Tablets, Küchenmonitore,
 
 Eine **Ansicht** pro Display, jede mit eigener URL, eigenem Layout und Hintergrund. Ein Widget am Laptop ändern, und jedes Display zieht innerhalb einer Sekunde nach, ohne Neuladen. Läuft auf einem Raspberry Pi 4/5, einem NAS, einem alten Laptop, einem Mac mini, einem VPS oder in Home Assistant OS als [Add-on](wiki/home-assistant-addon.md).
 
+Auch ein KI-Agent kann es bedienen: Magic Frame bringt einen [MCP-Server](wiki/mcp.md) mit, über den Claude Code und andere Agenten Ansichten umbauen, Notizen an die Wand schicken und die Einkaufsliste führen.
+
 <!-- s:quickstart -->
 ## Schnellstart
 
@@ -107,7 +109,7 @@ Jede Option von jedem: [Zeit und Wetter](wiki/widgets-time-weather.md) · [Kalen
 <!-- s:docs -->
 ## Dokumentation
 
-Das vollständige Handbuch liegt auf **[magicframe.dev/docs](https://magicframe.dev/docs/)** und in diesem Repo unter [`wiki/`](wiki/README.md) — 28 Seiten, aus dem Code geschrieben und in der CI dagegen geprüft (englisch).
+Das vollständige Handbuch liegt auf **[magicframe.dev/docs](https://magicframe.dev/docs/)** und in diesem Repo unter [`wiki/`](wiki/README.md) — 29 Seiten, aus dem Code geschrieben und in der CI dagegen geprüft (englisch).
 
 | | |
 |---|---|
@@ -115,7 +117,7 @@ Das vollständige Handbuch liegt auf **[magicframe.dev/docs](https://magicframe.
 | **Benutzen** | [The editor](wiki/the-editor.md) · [Views and displays](wiki/views-and-displays.md) · [Wallpapers](wiki/wallpapers.md) · [Widgets](wiki/widgets.md) · [Stacking and visibility](wiki/stacking-and-visibility.md) · [Themes and styling](wiki/themes-and-styling.md) |
 | **Verbinden** | [Home Assistant](wiki/home-assistant.md) · [Immich](wiki/immich.md) · [Calendars](wiki/calendars.md) · [Weather providers](wiki/weather-providers.md) · [Other sources](wiki/other-sources.md) |
 | **Betreiben** | [Settings](wiki/settings.md) · [Users and security](wiki/users-and-security.md) · [Hosting and your domain](wiki/hosting-and-domain.md) · [Troubleshooting](wiki/troubleshooting.md) |
-| **Erweitern** | [The companion API](wiki/companion-api.md) · [Custom modules](wiki/custom-modules.md) · [Writing a module](wiki/module-development.md) |
+| **Erweitern** | [The companion API](wiki/companion-api.md) · [Agents and MCP](wiki/mcp.md) · [Custom modules](wiki/custom-modules.md) · [Writing a module](wiki/module-development.md) |
 
 Du liest das mit einem Agenten? [`llms.txt`](llms.txt) ist die Karte, [`llms-full.txt`](llms-full.txt) alle Seiten in einer Anfrage. Was als Nächstes kommt: [`ROADMAP.md`](ROADMAP.md).
 

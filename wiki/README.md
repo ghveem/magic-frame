@@ -40,6 +40,7 @@ lying, and `scripts/shoot-wiki.mjs` retakes them.
 | doing the photo-frame thing | [Wallpapers](wallpapers.md) → [Immich](immich.md) |
 | connecting your home | [Home Assistant](home-assistant.md) |
 | an AI agent | [`/llms.txt`](../llms.txt) for the map, [`/llms-full.txt`](../llms-full.txt) for everything |
+| letting an AI agent run it | [Agents and MCP](mcp.md) |
 | stuck | [Troubleshooting](troubleshooting.md) |
 
 ## Everything
@@ -84,6 +85,7 @@ lying, and `scripts/shoot-wiki.mjs` retakes them.
 ### Extending it
 
 - [The companion API](companion-api.md) — driving Magic Frame over HTTP, and iOS Shortcuts
+- [Agents and MCP](mcp.md) — letting an AI agent such as Claude Code run your views and your household lists
 - [Custom modules](custom-modules.md) — installing a widget somebody else wrote
 - [Writing a module](module-development.md) — building your own widget
 
