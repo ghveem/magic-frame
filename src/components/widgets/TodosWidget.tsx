@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { connectLiveSync } from "@/lib/live-socket";
 import { ClipboardList, Plus } from "lucide-react";
 import { format, isPast, isToday, isTomorrow } from "date-fns";
-import { de, enUS } from "date-fns/locale";
+import { dateFnsLocale } from "@/lib/i18n/date-locale";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { renderInlineMarkdown } from "@/lib/inline-markdown";
 import { writeAndReport } from "@/lib/ha/action-client";
@@ -246,7 +246,7 @@ function TodoRow({
       ? t("heute")
       : isTomorrow(due)
         ? t("morgen")
-        : format(due, locale === "en" ? "dd MMM" : "dd. MMM", { locale: locale === "en" ? enUS : de })
+        : format(due, locale === "en" ? "dd MMM" : "dd. MMM", { locale: dateFnsLocale(locale) })
     : "";
   const prioColor =
     todo.priority === "high"

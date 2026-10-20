@@ -192,20 +192,23 @@ export function wmoToIcon(
   return <Cloud {...props} className="w-full h-full opacity-80" />;
 }
 
-// Nimmt jede Oberflaechensprache an. Eigene Texte gibt es nur auf Deutsch und
-// Englisch; jede andere Sprache (Norwegisch seit #89) faellt auf Englisch
-// zurueck — nicht auf Deutsch, das waere fuer einen norwegischen Bildschirm
-// die falsche Richtung.
+// Eigene Texte gibt es auf Deutsch, Englisch und Norwegisch (nb/nn). Jede
+// andere Sprache faellt auf Englisch zurueck — nicht auf Deutsch (#89).
+const WMO_NB = ["Klart", "Lettskyet", "Skyet", "Overskyet", "Tåke", "Yr", "Regn", "Snø", "Tordenvær", "Overskyet"];
+const WMO_NN = ["Klårt", "Lettskya", "Skya", "Overskya", "Tåke", "Yr", "Regn", "Snø", "Tordenver", "Overskya"];
+
 export function wmoToText(code: number, locale: string = "de"): string {
+  const nor = locale === "nb" ? WMO_NB : locale === "nn" ? WMO_NN : null;
   const en = locale !== "de";
-  if (code === 0) return en ? "Clear" : "Klar";
-  if (code === 1) return en ? "Mostly clear" : "Leicht bewölkt";
-  if (code === 2) return en ? "Cloudy" : "Bewölkt";
-  if (code === 3) return en ? "Overcast" : "Stark bewölkt";
-  if ([45, 48].includes(code)) return en ? "Fog" : "Nebel";
-  if ([51, 53, 55, 56, 57].includes(code)) return en ? "Drizzle" : "Nieselregen";
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return en ? "Rain" : "Regen";
-  if ([71, 73, 75, 77, 85, 86].includes(code)) return en ? "Snow" : "Schnee";
-  if ([95, 96, 99].includes(code)) return en ? "Thunderstorm" : "Gewitter";
-  return en ? "Overcast" : "Wolkig";
+  const pick = (i: number, de: string, e: string) => (nor ? nor[i] : en ? e : de);
+  if (code === 0) return pick(0, "Klar", "Clear");
+  if (code === 1) return pick(1, "Leicht bewölkt", "Mostly clear");
+  if (code === 2) return pick(2, "Bewölkt", "Cloudy");
+  if (code === 3) return pick(3, "Stark bewölkt", "Overcast");
+  if ([45, 48].includes(code)) return pick(4, "Nebel", "Fog");
+  if ([51, 53, 55, 56, 57].includes(code)) return pick(5, "Nieselregen", "Drizzle");
+  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return pick(6, "Regen", "Rain");
+  if ([71, 73, 75, 77, 85, 86].includes(code)) return pick(7, "Schnee", "Snow");
+  if ([95, 96, 99].includes(code)) return pick(8, "Gewitter", "Thunderstorm");
+  return pick(9, "Wolkig", "Overcast");
 }

@@ -6,7 +6,7 @@ import {
   startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval,
   isSameMonth, differenceInCalendarDays, getISOWeek,
 } from "date-fns";
-import { de, enUS } from "date-fns/locale";
+import { dateFnsLocale } from "@/lib/i18n/date-locale";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useGlassStyle } from "@/lib/ui/glass";
 import { calendarOwnSurface } from "@/lib/widgets/calendar-surface";
@@ -56,7 +56,7 @@ const EMPTY_DAYS_FETCH_LIMIT = 60;
 
 export default function CalendarWidget({ config, dashboardId, onVisibilityChange }: { config?: any, dashboardId?: string, onVisibilityChange?: (isVisible: boolean) => void }) {
   const { locale, t } = useLocale();
-  const dfLocale = locale === "en" ? enUS : de;
+  const dfLocale = dateFnsLocale(locale);
   // Feeds-Array bevorzugen, Legacy icalUrl als Single-Feed fallback.
   const rawFeeds: FeedConfig[] = Array.isArray(config?.feeds)
     ? config.feeds.filter(isValidFeed)
@@ -614,7 +614,7 @@ export default function CalendarWidget({ config, dashboardId, onVisibilityChange
         <div className="grid shrink-0 pb-[0.2em]" style={{ gridTemplateColumns: colsTemplate }}>
           {showWeekNumbers && (
             <div className="text-center uppercase tracking-wider font-medium" style={{ color: fgDim, fontSize: `${monthHeadPx * 0.85}px` }}>
-              {locale === "en" ? "Wk" : "KW"}
+              {locale === "en" ? "Wk" : locale === "de" ? "KW" : "Uke"}
             </div>
           )}
           {weekdayHead.map((d) => (
