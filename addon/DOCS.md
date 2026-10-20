@@ -23,6 +23,7 @@ The database is created on first start, which takes a moment.
 | `timezone` | Leave empty — the add-on already runs in Home Assistant's own time zone. Only fill this in to override it, with an IANA name like `Europe/Berlin`. It decides what the clock and calendar show on your displays. |
 | `ha_auto_login` | On by default. Home Assistant admins open Magic Frame from the sidebar without typing a password. Everyone else gets the normal sign-in page. |
 | `ha_action_unrestricted` | Off by default. A display may only operate entities that are placed on one of your views. Turn this on only if something addresses an entity that sits on no view — a custom module with a hard-coded entity, or a script of your own. |
+| `public_url` | Empty by default. Set it only if Magic Frame is reachable under an address of its own — for example `https://my.home.org:8098` behind your own reverse proxy. The sidebar page then links there instead of `http://` plus the name you opened Home Assistant with. |
 
 ## Connecting Home Assistant
 

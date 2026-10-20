@@ -47,6 +47,13 @@ configuration:
     description: >-
       Lets Home Assistant administrators open Magic Frame from the sidebar
       without typing a password. Everyone else gets the normal sign-in page.
+  public_url:
+    name: Public address
+    description: >-
+      Leave empty unless Magic Frame is reachable under an address of its own,
+      for example https://my.home.org:8098 behind your own reverse proxy. The
+      sidebar page then links there. Empty means the name you opened Home
+      Assistant with, plus the port below, over http.
 network:
   3000/tcp: >-
     The address your displays and your browser use, for example

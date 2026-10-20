@@ -158,7 +158,25 @@ async function isHaAdmin(userId) {
 //   2. '_top' war ohnehin falsch gedacht. Es reisst Home Assistant aus dem
 //      Fenster — Seitenleiste weg, in der Companion-App die Verbindung tot.
 //      Ein neuer Tab lässt HA genau so stehen, wie es war.
-function landingPage(publicPort, autoLoginEnabled) {
+// Feste öffentliche Adresse aus der Add-on-Option public_url (#113). Wer
+// Home Assistant über https mit eigenem Namen öffnet, erreicht Magic Frame oft
+// über einen eigenen Proxy mit https — das kann die Startseite nicht erraten.
+// Nur http(s) mit Hostname; alles andere wird ignoriert, dann gilt wie bisher
+// der Name aus der Adresszeile plus veröffentlichter Port.
+function publicUrlFromEnv() {
+  const raw = (process.env.MAGIC_FRAME_PUBLIC_URL || '').trim();
+  if (!raw) return null;
+  try {
+    const u = new URL(raw);
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return null;
+    if (u.username || u.password || u.search || u.hash) return null;
+    return (u.origin + u.pathname).replace(/\/+$/, '');
+  } catch {
+    return null;
+  }
+}
+
+function landingPage(publicPort, autoLoginEnabled, publicUrl) {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -201,13 +219,19 @@ function landingPage(publicPort, autoLoginEnabled) {
        <code id="addrview">…</code></p>
     <p style="color:#6f7686">Each view's own address is listed under
        <strong>Views</strong> in the editor — that is also where you name them.</p>
+    <p id="httpshint" style="color:#6f7686;display:none">Home Assistant is open over https
+       here. If Magic Frame is reachable over https as well, enter that address
+       under the add-on's <strong>Configuration → Public address</strong>.</p>
   </div>
 </div>
 <script>
   var base = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
-  // location.hostname ist der Name, den der Nutzer für Home Assistant getippt
-  // hat — genau der, unter dem seine Tablets die App auch erreichen.
-  var target = 'http://' + location.hostname + ':' + ${JSON.stringify(String(publicPort))};
+  // Ohne feste Adresse: location.hostname ist der Name, den der Nutzer für
+  // Home Assistant getippt hat — genau der, unter dem seine Tablets die App
+  // auch erreichen. Bewusst http: der veröffentlichte Port spricht kein TLS.
+  var fixed = ${JSON.stringify(publicUrl || '').replace(/</g, '\\u003c')};
+  var target = fixed || ('http://' + location.hostname + ':' + ${JSON.stringify(String(publicPort))});
+  if (!fixed && location.protocol === 'https:') document.getElementById('httpshint').style.display = '';
   var go = document.getElementById('go'), err = document.getElementById('err');
   document.getElementById('plain').href = target + '/login';
   document.getElementById('addr').textContent = target;
@@ -271,6 +295,10 @@ function startIngressListener(opts = {}) {
   if (!port) return null;
 
   const publicPort = process.env.MAGIC_FRAME_PUBLIC_PORT || '8098';
+  const publicUrl = publicUrlFromEnv();
+  if (process.env.MAGIC_FRAME_PUBLIC_URL && !publicUrl) {
+    console.warn('[ingress] public_url is not an http(s) address and is ignored:', process.env.MAGIC_FRAME_PUBLIC_URL);
+  }
   const autoLogin = process.env.MAGIC_FRAME_HA_AUTO_LOGIN !== '0';
   const basePath = (opts.basePath || '').replace(/\/$/, '');
   const handle = opts.handle;
@@ -365,7 +393,7 @@ function startIngressListener(opts = {}) {
     // Alles andere: die Startseite. Auch /irgendwas — die Seite ist der
     // einzige Inhalt, den es hier gibt.
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    res.end(landingPage(publicPort, autoLogin));
+    res.end(landingPage(publicPort, autoLogin, publicUrl));
   });
 
   server.listen(port, () => {

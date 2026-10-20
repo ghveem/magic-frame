@@ -141,6 +141,7 @@ if [ -f /data/options.json ]; then
     str("admin_email", "OPT_ADMIN_EMAIL");
     str("admin_password", "OPT_ADMIN_PASSWORD");
     str("timezone", "OPT_TZ");
+    str("public_url", "OPT_PUBLIC_URL");
     out.push("OPT_HA_UNRESTRICTED=" + (o.ha_action_unrestricted === true ? "1" : "0"));
     out.push("OPT_HA_AUTOLOGIN=" + (o.ha_auto_login === false ? "0" : "1"));
     out.push("OPT_SIDEBAR_MODE=" + (o.sidebar_mode === "launcher" ? "launcher" : "embedded"));
@@ -156,6 +157,7 @@ if [ -f /data/options.json ]; then
   [ -n "${OPT_ADMIN_EMAIL:-}" ] && export ADMIN_EMAIL="${OPT_ADMIN_EMAIL}"
   [ -n "${OPT_ADMIN_PASSWORD:-}" ] && export ADMIN_PASSWORD="${OPT_ADMIN_PASSWORD}"
   [ -n "${OPT_TZ:-}" ] && export TZ="${OPT_TZ}"
+  [ -n "${OPT_PUBLIC_URL:-}" ] && export MAGIC_FRAME_PUBLIC_URL="${OPT_PUBLIC_URL}"
   [ "${OPT_HA_UNRESTRICTED:-0}" = "1" ] && export MAGIC_FRAME_HA_ACTION_UNRESTRICTED=1
   [ "${OPT_HA_AUTOLOGIN:-1}" = "0" ] && export MAGIC_FRAME_HA_AUTO_LOGIN=0
   export MAGIC_FRAME_SIDEBAR_MODE="${OPT_SIDEBAR_MODE:-embedded}"
