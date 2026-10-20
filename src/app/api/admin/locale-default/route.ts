@@ -7,6 +7,7 @@ import {
   unauthorizedResponse,
 } from "@/lib/auth/dal";
 import { setDefaultLocale, getDefaultLocale } from "@/lib/i18n/default-locale";
+import { isLocale } from "@/lib/i18n/locales";
 
 export const dynamic = "force-dynamic";
 
@@ -30,8 +31,7 @@ export async function POST(req: Request) {
     await verifyAdmin();
     const body = await req.json().catch(() => ({}));
     const raw = body?.locale;
-    const next =
-      raw === "de" || raw === "en" || raw === "nb" || raw === "nn" ? raw : null;
+    const next = isLocale(raw) ? raw : null;
     await setDefaultLocale(next);
     return NextResponse.json({ ok: true, locale: next });
   } catch (e) {

@@ -4,10 +4,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { EN } from "./en";
 import { NB } from "./nb";
 import { NN } from "./nn";
+import { PT_BR } from "./pt-BR";
+import { isLocale, type Locale } from "./locales";
 
-export type Locale = "de" | "en" | "nb" | "nn";
+export type { Locale } from "./locales";
 
-const DICTS: Partial<Record<Locale, Record<string, string>>> = { en: EN, nb: NB, nn: NN };
+const DICTS: Partial<Record<Locale, Record<string, string>>> = { en: EN, nb: NB, nn: NN, "pt-BR": PT_BR };
 
 type LocaleCtx = {
   locale: Locale;
@@ -41,7 +43,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     const saved = localStorage.getItem("mf-lang");
-    if (saved === "en" || saved === "de" || saved === "nb" || saved === "nn") {
+    if (isLocale(saved)) {
       setLocaleState(saved);
       return;
     }
@@ -50,7 +52,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
       .then((r) => r.json())
       .then((d) => {
         if (cancelled) return;
-        if (d?.locale === "de" || d?.locale === "en" || d?.locale === "nb" || d?.locale === "nn") {
+        if (isLocale(d?.locale)) {
           setLocaleState(d.locale);
         }
       })
@@ -74,7 +76,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     } catch {}
   };
 
-  // nb/nn fall back to English (not German) for any key that hasn't been
+  // nb/nn/pt-BR fall back to English (not German) for any key that hasn't been
   // translated yet, since English is the more useful default for readers
   // of those locales.
   const t = (de: string) => (locale === "de" ? de : DICTS[locale]?.[de] ?? EN[de] ?? de);

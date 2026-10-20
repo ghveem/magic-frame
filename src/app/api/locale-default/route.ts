@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 // fresh browser inherits the installation's preferred locale instead of
 // the global "en" fallback.
 //
-// Reveals only the locale choice itself ("de" | "en" | "nb" | "nn" | null),
+// Reveals only the locale choice itself (including "pt-BR", or null),
 // nothing sensitive. Cheap enough to call on every page mount.
 export async function GET() {
   try {

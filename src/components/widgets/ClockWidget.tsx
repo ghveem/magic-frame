@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Droplets, Wind, Sun } from "lucide-react";
 import { wmoToIcon, wmoToText, moonPhaseFraction } from "@/lib/weather/wmo";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { intlLocale } from "@/lib/i18n/date-locale";
+import { clockDateLocale, uses12HourClock } from "@/lib/i18n/locales";
 
 export default function ClockWidget({ config }: { config?: any }) {
   const { locale, t } = useLocale();
@@ -12,19 +12,9 @@ export default function ClockWidget({ config }: { config?: any }) {
   // but the user can override per widget via the Inspector — same pattern as
   // unitTemp / unitWind on the Weather widget. Settings:
   //   timeFormat: "auto" | "12h" | "24h"
-  //   dateFormat: "auto" | "en-US" | "en-GB" | "de-DE"
-  const localeBased = intlLocale(locale);
-  const dateLocale: string = (() => {
-    const f = config?.dateFormat;
-    if (f === "en-US" || f === "en-GB" || f === "de-DE") return f;
-    return localeBased; // "auto"
-  })();
-  const is12h: boolean = (() => {
-    const f = config?.timeFormat;
-    if (f === "12h") return true;
-    if (f === "24h") return false;
-    return locale === "en"; // "auto"
-  })();
+  //   dateFormat: "auto" | "en-US" | "en-GB" | "de-DE" | "pt-BR"
+  const dateLocale = clockDateLocale(locale, config?.dateFormat);
+  const is12h = uses12HourClock(locale, config?.timeFormat);
   const [time, setTime] = useState<Date | null>(null);
   const [weather, setWeather] = useState<any>(null);
 
@@ -121,13 +111,19 @@ export default function ClockWidget({ config }: { config?: any }) {
      }
      minutes = time.getMinutes().toString().padStart(2, '0');
      seconds = time.getSeconds().toString().padStart(2, '0');
-     const days = locale === "en"
+     const days = dateLocale === "pt-BR"
+        ? ["dom.", "seg.", "ter.", "qua.", "qui.", "sex.", "sáb."]
+        : dateLocale.startsWith("en")
         ? ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         : ["So.", "Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa."];
-     const months = locale === "en"
+     const months = dateLocale === "pt-BR"
+        ? ["jan.", "fev.", "mar.", "abr.", "mai.", "jun.", "jul.", "ago.", "set.", "out.", "nov.", "dez."]
+        : dateLocale.startsWith("en")
         ? ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         : ["Jan.", "Feb.", "Mär.", "Apr.", "Mai", "Jun.", "Jul.", "Aug.", "Sep.", "Okt.", "Nov.", "Dez."];
-     dateStr = locale === "en"
+     dateStr = dateLocale === "pt-BR"
+        ? `${days[time.getDay()]}, ${time.getDate()} de ${months[time.getMonth()]}`
+        : dateLocale.startsWith("en")
         ? `${days[time.getDay()]} ${time.getDate()} ${months[time.getMonth()]}`
         : `${days[time.getDay()]} ${time.getDate().toString().padStart(2, '0')}. ${months[time.getMonth()]}`;
   }

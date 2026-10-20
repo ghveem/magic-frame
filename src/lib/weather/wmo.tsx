@@ -192,12 +192,25 @@ export function wmoToIcon(
   return <Cloud {...props} className="w-full h-full opacity-80" />;
 }
 
-// Eigene Texte gibt es auf Deutsch, Englisch und Norwegisch (nb/nn). Jede
-// andere Sprache faellt auf Englisch zurueck — nicht auf Deutsch (#89).
+// Eigene Texte gibt es auf Deutsch, Englisch, Norwegisch (nb/nn) und
+// Brasilianisch-Portugiesisch. Jede andere Sprache faellt auf Englisch
+// zurueck — nicht auf Deutsch (#89).
 const WMO_NB = ["Klart", "Lettskyet", "Skyet", "Overskyet", "Tåke", "Yr", "Regn", "Snø", "Tordenvær", "Overskyet"];
 const WMO_NN = ["Klårt", "Lettskya", "Skya", "Overskya", "Tåke", "Yr", "Regn", "Snø", "Tordenver", "Overskya"];
 
 export function wmoToText(code: number, locale: string = "de"): string {
+  if (locale === "pt-BR") {
+    if (code === 0) return "Céu limpo";
+    if (code === 1) return "Poucas nuvens";
+    if (code === 2) return "Nublado";
+    if (code === 3) return "Encoberto";
+    if ([45, 48].includes(code)) return "Nevoeiro";
+    if ([51, 53, 55, 56, 57].includes(code)) return "Garoa";
+    if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "Chuva";
+    if ([71, 73, 75, 77, 85, 86].includes(code)) return "Neve";
+    if ([95, 96, 99].includes(code)) return "Trovoadas";
+    return "Encoberto";
+  }
   const nor = locale === "nb" ? WMO_NB : locale === "nn" ? WMO_NN : null;
   const en = locale !== "de";
   const pick = (i: number, de: string, e: string) => (nor ? nor[i] : en ? e : de);

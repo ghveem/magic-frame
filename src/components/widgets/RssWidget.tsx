@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Rss } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useT, useLocale } from "@/lib/i18n/LocaleProvider";
-import { intlLocale } from "@/lib/i18n/date-locale";
+import { intlDateLocale } from "@/lib/i18n/locales";
 
 type RssItem = { title: string; link: string; date: string | null; image: string | null; summary?: string | null; source?: string };
 
@@ -71,7 +71,7 @@ function SmartTitle({ text, mode, maxLines, accent, linkable, link, onLinkClick 
 export default function RssWidget({ config }: { config?: any }) {
   const t = useT();
   const { locale } = useLocale();
-  const dateLocale = intlLocale(locale);
+  const dateLocale = intlDateLocale(locale);
 
   // feeds: neu als Array einzelner URLs, rückwärtskompatibel zum alten String.
   const feedsRaw = config?.feeds;

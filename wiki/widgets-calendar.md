@@ -50,7 +50,9 @@ reason `cardOpacity` looks different between the views.
 The month grid always shows six week rows of whole weeks around the current
 month, so days from the neighbouring months appear at the edges, slightly dimmed.
 The week starts on Monday when the app language is German and on Sunday when it
-is English.
+is English or Brazilian Portuguese. Portuguese uses localised weekday/month
+names and 24-hour times in automatic mode. Event titles remain as supplied by
+the calendar; choosing a language does not translate their contents.
 
 ### What a month cell shows
 
@@ -116,7 +118,7 @@ draw their own compact rows and only take a small text-size hint from it.
 | --- | --- |
 | feed colour | Per feed, set on the feed card. It colours that feed's events — the left edge of a card, the bar in a month cell, the dot in the overflow row. |
 | `color` | The widget's accent and text colour. Events from a feed with no colour of its own fall back to it. Default `#ffffff`. |
-| `calendarTimeFormat` | `auto`, `24h` or `12h`. `auto` follows the app language: English gives 12-hour with AM/PM, German 24-hour. |
+| `calendarTimeFormat` | `auto`, `24h` or `12h`. `auto` follows the app language: English gives 12-hour with AM/PM, German and Brazilian Portuguese 24-hour. Explicit choices win. |
 | `cardOpacity` | How solid the tiles or the panel are, 0–100 %. Default 40. |
 | `cardBlur` | Glass tiles only: how strongly the wallpaper behind a tile is blurred, 0–40 px. Default 12. `0` switches the blur off — see the note on the timer ring under [Wallpapers](wallpapers.md#it-is-also-the-most-expensive-thing-on-the-screen) before blaming the blur for CPU load. |
 | `cardTheme` | `auto`, `dark` or `light`. `auto` follows the view's own light/dark setting. `light` means a light surface with dark text. |

@@ -5,6 +5,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { createClient } from "webdav";
 import { extractEXIFFromBuffer } from "@/lib/wallpaper-engine/exif";
 import { normalizeWebdavUrl, isSupportedWebdavImage, countWebdavImages } from "@/lib/wallpaper-engine/webdav";
+import { intlDateLocale } from "@/lib/i18n/locales";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest) {
      const dashboardId = req.nextUrl.searchParams.get('dashboardId') || "1";
      // en-US matches Clock + Calendar + Weather + Immich playlist —
      // "May 27, 2026" for English, "27. Mai 2026" for German.
-     const dateLocale = req.nextUrl.searchParams.get('lang') === 'en' ? 'en-US' : 'de-DE';
+     const dateLocale = intlDateLocale(req.nextUrl.searchParams.get('lang'));
      const dashboard = await prisma.dashboard.findUnique({ where: { id: dashboardId } });
      if (!dashboard || !dashboard.wallpaper) return NextResponse.json({ error: "Not Found" }, { status: 404 });
      const wp = dashboard.wallpaper as any;

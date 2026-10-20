@@ -51,7 +51,7 @@
         }
       ],
       "takenAt": {
-        "src/components/widgets/ClockWidget.tsx": "5c38c7768a9b"
+        "src/components/widgets/ClockWidget.tsx": "a70b655a73cf"
       }
     },
     {
@@ -76,8 +76,8 @@
         }
       ],
       "takenAt": {
-        "src/components/widgets/WeatherWidget.tsx": "6bd4d969826e",
-        "src/lib/weather/wmo.tsx": "6bae30d7dc8c"
+        "src/components/widgets/WeatherWidget.tsx": "b7a751a53ba7",
+        "src/lib/weather/wmo.tsx": "ff23213bf43d"
       }
     },
     {
@@ -125,7 +125,7 @@
       ],
       "element": ".react-grid-item",
       "takenAt": {
-        "src/components/widgets/CalendarWidget.tsx": "d4f04eeef559"
+        "src/components/widgets/CalendarWidget.tsx": "f2320636691f"
       }
     },
     {
@@ -173,7 +173,7 @@
       ],
       "element": ".react-grid-item",
       "takenAt": {
-        "src/components/widgets/MessagesWidget.tsx": "aa9077e9e583"
+        "src/components/widgets/MessagesWidget.tsx": "1b90f63e08fc"
       }
     },
     {
@@ -221,7 +221,7 @@
       ],
       "element": ".react-grid-item",
       "takenAt": {
-        "src/components/widgets/TodosWidget.tsx": "3fc02b5f84f4"
+        "src/components/widgets/TodosWidget.tsx": "76c59ddadc49"
       }
     },
     {
@@ -413,7 +413,7 @@
       ],
       "element": ".react-grid-item",
       "takenAt": {
-        "src/components/widgets/RssWidget.tsx": "877dd0774c16"
+        "src/components/widgets/RssWidget.tsx": "25f2c6c7771f"
       }
     },
     {
@@ -834,7 +834,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
+        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
       }
     },
     {
@@ -859,7 +859,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
+        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
       }
     },
     {
@@ -884,7 +884,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
+        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
       }
     },
     {
@@ -909,7 +909,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
+        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
       }
     },
     {
@@ -934,7 +934,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
+        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
       }
     },
     {
@@ -959,7 +959,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
+        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
       }
     },
     {
@@ -990,7 +990,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/settings/page.tsx": "06182fc30783"
+        "src/app/editor/(app)/settings/page.tsx": "90e2f2345241"
       },
       "element": "div.rounded-2xl:has(h2:text-is(\"Dynamic DNS (DDNS)\"))"
     },
@@ -1013,7 +1013,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/backups/page.tsx": "08aff590d850"
+        "src/app/editor/(app)/backups/page.tsx": "1e4735750995"
       }
     },
     {
@@ -1223,7 +1223,7 @@
         }
       ],
       "takenAt": {
-        "src/components/widgets/WeatherWidget.tsx": "6bd4d969826e"
+        "src/components/widgets/WeatherWidget.tsx": "b7a751a53ba7"
       }
     },
     {
