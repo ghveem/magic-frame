@@ -6,12 +6,23 @@ export function isLocale(value: unknown): value is Locale {
   return typeof value === "string" && (LOCALES as readonly string[]).includes(value);
 }
 
+function supportsIntlLocale(tag: string): boolean {
+  try {
+    return Intl.DateTimeFormat.supportedLocalesOf([tag]).length > 0;
+  } catch {
+    return false;
+  }
+}
+
 // Regional format per interface language. A missing or unknown value keeps
 // the historical German default — the server routes read it from ?lang=.
+// Chromium (and with it most wall tablets) ships no nn-NO data and would
+// silently fall back to the device language — often English with AM/PM.
+// Bokmål's format is nearly identical, so nn falls back to that instead.
 export function intlDateLocale(locale: string | null): string {
   if (locale === "pt-BR") return "pt-BR";
   if (locale === "nb") return "nb-NO";
-  if (locale === "nn") return "nn-NO";
+  if (locale === "nn") return supportsIntlLocale("nn-NO") ? "nn-NO" : "nb-NO";
   return locale === "en" ? "en-US" : "de-DE";
 }
 
