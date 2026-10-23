@@ -628,7 +628,7 @@
     {
       "id": "home-assistant-integration-card",
       "page": "home-assistant.md",
-      "caption": "The Integrations page with the Home Assistant card filled in: an address in the URL field, a masked token, and the line 'Verbindung konfiguriert.' beside the Save button.",
+      "caption": "The Integrations page with the Home Assistant card filled in: an address in the URL field, the token field reading 'Saved — leave empty to keep it', and the line 'Connection configured.' beside the Save button.",
       "shows": [
         "src/app/editor/(app)/integrations/page.tsx"
       ],

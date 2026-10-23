@@ -82,13 +82,18 @@ anybody else:
 - the installation-wide default language (`/api/admin/locale-default`)
 - uploading, changing and removing custom modules (`/api/admin/modules`,
   `/api/admin/modules/[id]`)
-- restoring and deleting snapshots, and importing a backup
+- restoring and deleting snapshots, and exporting and importing a backup
   (`/api/admin/backups/…`)
 - connecting Todoist (`/api/admin/todoist`)
+- the Home Assistant connection and the global Immich connection
+  (`/api/settings`)
 
 **What View only still permits.** Everything about the views themselves: a
 View-only account can edit and save layouts, add and delete views, change
-wallpapers, and mint itself a companion token. It can also export a backup.
+wallpapers, and mint itself a companion token. It never sees a stored password
+or key: a wallpaper's WebDAV password or its own Immich key arrives without
+them, and saving the view keeps the stored ones as long as the wallpaper's
+address stays the same.
 
 So the name is about the *settings*, not about the dashboards. If you want
 somebody to look at a screen and change nothing at all, give them the
@@ -344,6 +349,13 @@ has to work without one. Among those: `/api/layout/get` (the layout itself),
 `/api/ha/state`, `/api/ha/stream`, `/api/ha/entities`,
 `/api/ha/camera/[entity]/snapshot`, `/api/wallpaper/immich/playlist` and
 `/api/wallpaper/webdav/playlist`.
+
+`/api/layout/get` leaves out the user names, passwords and keys stored with a
+view's wallpaper; the server uses them itself to fetch the pictures. Only an
+Admin signed in to the editor gets them, to edit them. Up to 1.5.7 they were
+part of the open answer, and every display kept a copy in its browser storage.
+If your installation was reachable by people you do not trust, change those
+passwords and keys.
 
 Two of those are worth naming individually:
 

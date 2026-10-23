@@ -94,7 +94,7 @@ never tries one and fails.
 | --- | --- |
 | `get_widget_catalog` | the widget types and the grid rules; with a type, that widget's exact config schema |
 | `list_views` | every view with its id, name, orientation and widget count |
-| `get_view` | one view's full layout, wallpaper and settings |
+| `get_view` | one view's full layout, wallpaper and settings; stored passwords and keys are only named in `storedCredentials`, never shown, and `set_wallpaper` keeps them as long as the address stays the same |
 | `get_settings` | what is connected — Home Assistant, Immich — as true/false, never the secrets |
 | `list_ha_entities` | Home Assistant entities, filtered by domain or a search word |
 | `diagnose_ha_action` | whether a display would be allowed to act on an entity, and why |

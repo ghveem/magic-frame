@@ -149,6 +149,8 @@ which is which.
 
 ## Layout export
 
+Exporting needs an Admin account, like importing.
+
 1. In the editor, click **Backups** in the left sidebar.
 2. Click **Export** (Exportieren) on the **Export all views** card.
 3. Your browser downloads a file named `magicframe-backup-<date>.json`.
@@ -166,7 +168,9 @@ to hand to somebody or paste into an issue.
 
 - Accounts, passwords, two-factor secrets
 - Your Home Assistant address and access token
-- Immich address and API key
+- The global Immich address and API key
+- The user names, passwords and keys stored with a view's wallpaper — a NAS
+  folder's login, a view's own Immich key. Up to 1.5.7 these were in the file.
 - Google and Microsoft calendar tokens
 - Your OpenWeatherMap key
 - Uploaded images
@@ -185,6 +189,8 @@ Two more consequences worth planning around:
   config, so it lines up again once you reconnect Home Assistant.
 - A view whose wallpaper comes from Immich keeps the album selection, but the
   connection it used is not in the file.
+- Importing the file back into the same installation keeps the passwords and
+  keys already stored there, as long as the wallpaper's address is unchanged.
 
 ## Importing a layout export
 

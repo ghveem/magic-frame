@@ -29,7 +29,7 @@ inside Settings.**
    address is `/editor/integrations`.
 4. The first card on that page is **Home Assistant**.
 
-![The Integrations page with the Home Assistant card filled in: an address in the URL field, a masked token, and the line 'Verbindung konfiguriert.' beside the Save button.](img/home-assistant-integration-card.png)
+![The Integrations page with the Home Assistant card filled in: an address in the URL field, the token field reading 'Saved — leave empty to keep it', and the line 'Connection configured.' beside the Save button.](img/home-assistant-integration-card.png)
 
 ## Making a token and pasting it in
 
@@ -64,7 +64,13 @@ Home Assistant and paste it into Magic Frame once.
 
 The token is stored in Magic Frame's own database on your server and is used
 only by the server. It is never sent to a display and never appears in a page a
-browser downloads.
+browser downloads — not even on this card: once saved, the field stays empty and
+reads **Gespeichert — leer lassen, um ihn zu behalten** (Saved — leave empty to
+keep it). Leave it empty to keep the stored token, paste a new one to replace
+it. If you change the address, Magic Frame asks for the token again (**Neue
+Adresse — bitte den Token oder Schlüssel noch einmal eintragen.**), so a stored
+token is never sent to a server it was not entered for. The card needs an Admin
+account.
 
 ### Which address to type
 

@@ -2327,7 +2327,7 @@ inside Settings.**
    address is `/editor/integrations`.
 4. The first card on that page is **Home Assistant**.
 
-![The Integrations page with the Home Assistant card filled in: an address in the URL field, a masked token, and the line 'Verbindung konfiguriert.' beside the Save button.](img/home-assistant-integration-card.png)
+![The Integrations page with the Home Assistant card filled in: an address in the URL field, the token field reading 'Saved — leave empty to keep it', and the line 'Connection configured.' beside the Save button.](img/home-assistant-integration-card.png)
 
 ## Making a token and pasting it in
 
@@ -2362,7 +2362,13 @@ Home Assistant and paste it into Magic Frame once.
 
 The token is stored in Magic Frame's own database on your server and is used
 only by the server. It is never sent to a display and never appears in a page a
-browser downloads.
+browser downloads — not even on this card: once saved, the field stays empty and
+reads **Gespeichert — leer lassen, um ihn zu behalten** (Saved — leave empty to
+keep it). Leave it empty to keep the stored token, paste a new one to replace
+it. If you change the address, Magic Frame asks for the token again (**Neue
+Adresse — bitte den Token oder Schlüssel noch einmal eintragen.**), so a stored
+token is never sent to a server it was not entered for. The card needs an Admin
+account.
 
 ### Which address to type
 
@@ -2685,7 +2691,7 @@ never tries one and fails.
 | --- | --- |
 | `get_widget_catalog` | the widget types and the grid rules; with a type, that widget's exact config schema |
 | `list_views` | every view with its id, name, orientation and widget count |
-| `get_view` | one view's full layout, wallpaper and settings |
+| `get_view` | one view's full layout, wallpaper and settings; stored passwords and keys are only named in `storedCredentials`, never shown, and `set_wallpaper` keeps them as long as the address stays the same |
 | `get_settings` | what is connected — Home Assistant, Immich — as true/false, never the secrets |
 | `list_ha_entities` | Home Assistant entities, filtered by domain or a search word |
 | `diagnose_ha_action` | whether a display would be allowed to act on an entity, and why |
@@ -3400,6 +3406,8 @@ which is which.
 
 ## Layout export
 
+Exporting needs an Admin account, like importing.
+
 1. In the editor, click **Backups** in the left sidebar.
 2. Click **Export** (Exportieren) on the **Export all views** card.
 3. Your browser downloads a file named `magicframe-backup-<date>.json`.
@@ -3417,7 +3425,9 @@ to hand to somebody or paste into an issue.
 
 - Accounts, passwords, two-factor secrets
 - Your Home Assistant address and access token
-- Immich address and API key
+- The global Immich address and API key
+- The user names, passwords and keys stored with a view's wallpaper — a NAS
+  folder's login, a view's own Immich key. Up to 1.5.7 these were in the file.
 - Google and Microsoft calendar tokens
 - Your OpenWeatherMap key
 - Uploaded images
@@ -3436,6 +3446,8 @@ Two more consequences worth planning around:
   config, so it lines up again once you reconnect Home Assistant.
 - A view whose wallpaper comes from Immich keeps the album selection, but the
   connection it used is not in the file.
+- Importing the file back into the same installation keeps the passwords and
+  keys already stored there, as long as the wallpaper's address is unchanged.
 
 ## Importing a layout export
 
@@ -6795,13 +6807,18 @@ anybody else:
 - the installation-wide default language (`/api/admin/locale-default`)
 - uploading, changing and removing custom modules (`/api/admin/modules`,
   `/api/admin/modules/[id]`)
-- restoring and deleting snapshots, and importing a backup
+- restoring and deleting snapshots, and exporting and importing a backup
   (`/api/admin/backups/…`)
 - connecting Todoist (`/api/admin/todoist`)
+- the Home Assistant connection and the global Immich connection
+  (`/api/settings`)
 
 **What View only still permits.** Everything about the views themselves: a
 View-only account can edit and save layouts, add and delete views, change
-wallpapers, and mint itself a companion token. It can also export a backup.
+wallpapers, and mint itself a companion token. It never sees a stored password
+or key: a wallpaper's WebDAV password or its own Immich key arrives without
+them, and saving the view keeps the stored ones as long as the wallpaper's
+address stays the same.
 
 So the name is about the *settings*, not about the dashboards. If you want
 somebody to look at a screen and change nothing at all, give them the
@@ -7057,6 +7074,13 @@ has to work without one. Among those: `/api/layout/get` (the layout itself),
 `/api/ha/state`, `/api/ha/stream`, `/api/ha/entities`,
 `/api/ha/camera/[entity]/snapshot`, `/api/wallpaper/immich/playlist` and
 `/api/wallpaper/webdav/playlist`.
+
+`/api/layout/get` leaves out the user names, passwords and keys stored with a
+view's wallpaper; the server uses them itself to fetch the pictures. Only an
+Admin signed in to the editor gets them, to edit them. Up to 1.5.7 they were
+part of the open answer, and every display kept a copy in its browser storage.
+If your installation was reachable by people you do not trust, change those
+passwords and keys.
 
 Two of those are worth naming individually:
 
