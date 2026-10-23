@@ -55,6 +55,12 @@ const isValidFeed = (f: any): boolean => {
 // client-side, usando `limit`.
 const EMPTY_DAYS_FETCH_LIMIT = 60;
 
+// Die neue Agenda begrenzt PRO TAG (beim Gruppieren), die API aber schneidet
+// über alle Tage hinweg. Bekam sie das Tageslimit, war "Max. Termine pro Tag"
+// in Wahrheit eine Gesamtgrenze: ein voller Tag fraß das Kontingent für alle
+// folgenden (#123). Deshalb dieselbe großzügige Menge wie im Monatsraster.
+const AGENDA_FETCH_LIMIT = 500;
+
 export default function CalendarWidget({ config, dashboardId, onVisibilityChange }: { config?: any, dashboardId?: string, onVisibilityChange?: (isVisible: boolean) => void }) {
   const { locale, t } = useLocale();
   const dfLocale = dateFnsLocale(locale);
@@ -287,7 +293,7 @@ export default function CalendarWidget({ config, dashboardId, onVisibilityChange
           url.searchParams.set("days", "3");
         } else {
           // list + neue Agenda: gemeinsames „kommende Termine"-Fenster.
-          url.searchParams.set("limit", String(limit));
+          url.searchParams.set("limit", String(view === "agenda" ? AGENDA_FETCH_LIMIT : limit));
           url.searchParams.set("days", String(days));
         }
         const res = await fetch(url.toString(), { signal: controller.signal });
