@@ -28,6 +28,7 @@ import { createMessage, listActiveMessages, dismissMessage } from "@/lib/compani
 import { addItems, listItems, setItemChecked, clearChecked } from "@/lib/companion/shopping";
 import { createTodo, listTodos, setTodoDone } from "@/lib/companion/todos";
 import { createTimer, listActiveTimers, dismissTimer } from "@/lib/timers/store";
+import { publicWallpaper, storedCredentialFields, stripDeadViewSettings } from "@/lib/views/credentials";
 
 /**
  * Baut den MCP-Server für EINE Anfrage. Stateless: jede Anfrage bekommt eine
@@ -95,7 +96,7 @@ export function buildMcpServer(auth: McpAuth): McpServer {
   server.registerTool(
     "get_view",
     {
-      description: "The full layout of one view: every widget with its geometry and config, plus the wallpaper and view settings. layout is null when the view does not exist, [] when it is deliberately empty.",
+      description: "The full layout of one view: every widget with its geometry and config, plus the wallpaper and view settings. layout is null when the view does not exist, [] when it is deliberately empty. Stored passwords and keys of the wallpaper are left out and only named in storedCredentials; leave them out of set_wallpaper too and they are kept, as long as the address stays the same.",
       inputSchema: { dashboardId: z.string() },
       annotations: { readOnlyHint: true },
     },
@@ -104,7 +105,12 @@ export function buildMcpServer(auth: McpAuth): McpServer {
       if (view.layout === null) {
         return teachError(`View "${dashboardId}" does not exist`, await listViewIdsHint());
       }
-      return jsonResult(view);
+      return jsonResult({
+        ...view,
+        wallpaper: publicWallpaper(view.wallpaper),
+        settings: stripDeadViewSettings(view.settings),
+        storedCredentials: storedCredentialFields(view.wallpaper),
+      });
     },
   );
 

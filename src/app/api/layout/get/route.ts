@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { migrateLayoutConfigs } from "@/lib/widgets/ha-migration";
+import { getSession } from "@/lib/auth/session";
+import { publicWallpaper, stripDeadViewSettings } from "@/lib/views/credentials";
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
@@ -42,10 +44,20 @@ export async function GET(req: NextRequest) {
 
     const layout = migrateLayoutConfigs(rawLayout);
 
-    return NextResponse.json({ 
-      layout, 
-      wallpaper: dashboard.wallpaper, 
-      settings: dashboard.settings 
+    // Displays rufen das ohne Anmeldung ab. Die Zugangsdaten des Hintergrunds
+    // bekommt nur ein Admin im Editor, der sie dort bearbeitet; die Bilder holt
+    // der Server ohnehin selbst. Beim Speichern geht trotzdem nichts verloren,
+    // siehe mergeStoredCredentials.
+    let isAdmin = false;
+    try {
+      const session = await getSession();
+      isAdmin = !!session.userId && session.role === "admin";
+    } catch {}
+
+    return NextResponse.json({
+      layout,
+      wallpaper: isAdmin ? dashboard.wallpaper : publicWallpaper(dashboard.wallpaper),
+      settings: stripDeadViewSettings(dashboard.settings)
     }, { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } });
   } catch (error) {
     console.error(error);

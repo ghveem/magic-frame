@@ -5,6 +5,8 @@ import { layoutSyncBodySchema } from "@/lib/widgets/schemas";
 import { remapButtonTargets } from "@/lib/widgets/remap-targets";
 import { createSnapshot } from "@/lib/backups/snapshots";
 import { forgetAllowedEntities } from "@/lib/ha/action-policy";
+import { mergeStoredCredentials, stripDeadViewSettings } from "@/lib/views/credentials";
+import { adoptLegacyHaSettings } from "@/lib/settings/store";
 
 /**
  * DER Layout-Schreibweg. Alles, was eine Ansicht speichert, läuft hier durch —
@@ -24,8 +26,23 @@ import { forgetAllowedEntities } from "@/lib/ha/action-policy";
 export async function applyLayoutSync(
   parsed: z.infer<typeof layoutSyncBodySchema>,
 ): Promise<void> {
-  const { layout, wallpaper, settings, dashboardId: reqDashboardId } = parsed;
+  const { layout, dashboardId: reqDashboardId } = parsed;
   const dashboardId = reqDashboardId || "1";
+
+  // Wer die Ansicht ohne Zugangsdaten bekommen hat (ein Viewer, ein Agent),
+  // schickt sie auch ohne zurück — das darf sie nicht löschen.
+  const stored = await prisma.dashboard.findUnique({
+    where: { id: dashboardId },
+    select: { wallpaper: true, settings: true },
+  });
+  const wallpaper = parsed.wallpaper === undefined
+    ? undefined
+    : mergeStoredCredentials(parsed.wallpaper, stored?.wallpaper);
+  if (parsed.settings !== undefined && dashboardId === "1") {
+    const s = parsed.settings as any;
+    await adoptLegacyHaSettings(s?.haUrl || s?.haToken ? s : stored?.settings);
+  }
+  const settings = parsed.settings === undefined ? undefined : stripDeadViewSettings(parsed.settings);
 
   // Auto-Snapshot: aktuellen (Pre-Save-)Stand sichern, bevor überschrieben wird.
   // Fehler hier dürfen den Save nicht blockieren.

@@ -209,7 +209,7 @@ export default function EditorHome() {
             // waehrend die Integrationsseite daneben "verbunden" meldet und
             // die Widgets laengst Entitaeten anzeigen.
             out.haConnected =
-              d?.haManagedBy === "supervisor" || !!(d?.haUrl && d?.haToken);
+              d?.haManagedBy === "supervisor" || !!(d?.haUrl && d?.haTokenSet);
           })
           .catch(() => {}),
         readJson("/api/admin/todoist")

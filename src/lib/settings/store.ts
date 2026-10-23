@@ -77,6 +77,23 @@ export async function getAppSettings(): Promise<AppSettingsShape> {
   return { haUrl: legacy.haUrl ?? "", haToken: legacy.haToken ?? "", ...immich };
 }
 
+// Ganz alte Installationen haben Home Assistant nur in den Einstellungen von
+// Ansicht "1" stehen, und getAppSettings fällt darauf zurück. Seit 1.5.8 fallen
+// diese Felder beim Speichern einer Ansicht weg, weil sie mit jeder Ansicht
+// ausgeliefert wurden — vorher müssen sie also an ihren richtigen Platz. Nur
+// wenn global noch nichts steht, sonst war die Kopie ohnehin nie in Gebrauch.
+export async function adoptLegacyHaSettings(viewSettings: unknown) {
+  if (supervisorHaCredentials()) return;
+  const s = viewSettings as any;
+  if (!s || typeof s !== "object" || !(s.haUrl || s.haToken)) return;
+  const row = await prisma.appSettings.findUnique({ where: { id: "global" } });
+  if (row && (row.haUrl || row.haToken)) return;
+  await updateAppSettings({
+    haUrl: typeof s.haUrl === "string" ? s.haUrl : "",
+    haToken: typeof s.haToken === "string" ? s.haToken : "",
+  });
+}
+
 export async function updateAppSettings(patch: Partial<AppSettingsShape>) {
   const now = new Date();
   // extra mergen, NICHT überschreiben — sonst geht z.B. defaultLocale verloren.

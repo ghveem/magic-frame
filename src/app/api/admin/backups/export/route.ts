@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
 import {
-  verifySession,
+  verifyAdmin,
+  ForbiddenError,
+  forbiddenResponse,
   UnauthorizedError,
   unauthorizedResponse,
 } from "@/lib/auth/dal";
 import { prisma } from "@/lib/companion/prisma";
+import { stripDeadViewSettings } from "@/lib/views/credentials";
 
 export const dynamic = "force-dynamic";
 
 // GET /api/admin/backups/export — JSON-Download aller Views
 // (Layouts, Wallpapers, View-Settings). Globale Secrets (HA-Token) bewusst NICHT.
+// Die Zugangsdaten der Hintergründe dagegen schon, sonst zeigt eine
+// eingespielte Sicherung kein Bild — deshalb nur für Admins, wie das Einspielen.
 export async function GET() {
   try {
-    await verifySession();
+    await verifyAdmin();
 
     const dashboards = await prisma.dashboard.findMany({
       include: { widgets: true },
@@ -28,7 +33,7 @@ export async function GET() {
         id: d.id,
         name: d.name,
         wallpaper: d.wallpaper ?? null,
-        settings: d.settings ?? null,
+        settings: stripDeadViewSettings(d.settings) ?? null,
         widgets: d.widgets.map((w) => ({
           id: w.id,
           type: w.type,
@@ -54,6 +59,7 @@ export async function GET() {
     });
   } catch (err) {
     if (err instanceof UnauthorizedError) return unauthorizedResponse();
+    if (err instanceof ForbiddenError) return forbiddenResponse();
     console.error("backup export error", err);
     return NextResponse.json({ error: "Export fehlgeschlagen." }, { status: 500 });
   }

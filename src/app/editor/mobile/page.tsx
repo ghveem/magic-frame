@@ -25,7 +25,6 @@ import {
 } from "../_types";
 import AddWidgetModal from "../_components/AddWidgetModal";
 import WallpaperSettingsModal, { type ImmichAlbum, type ImmichPerson } from "../_components/WallpaperSettingsModal";
-import IntegrationsModal from "../_components/IntegrationsModal";
 import DashboardSettingsModal from "../_components/DashboardSettingsModal";
 import InspectorPanel from "../_components/InspectorPanel";
 import { LocaleProvider, useT } from "@/lib/i18n/LocaleProvider";
@@ -44,7 +43,6 @@ function MobileEditorInner() {
   const [activeSettingsId, setActiveSettingsId] = useState<string | null>(null);
   const [showAddWidget, setShowAddWidget] = useState(false);
   const [showBgSettings, setShowBgSettings] = useState(false);
-  const [showHASettings, setShowHASettings] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [wallpaper, setWallpaper] = useState<WallpaperConfig>({
     source: "unsplash",
@@ -52,7 +50,7 @@ function MobileEditorInner() {
     intervalSec: 60,
     showMetadata: true,
   });
-  const [settings, setSettings] = useState<any>({ haUrl: "", haToken: "" });
+  const [settings, setSettings] = useState<any>({});
 
   const [webdavFolders, setWebdavFolders] = useState<any[]>([]);
   // Bildzahl des gerade geöffneten Ordners (#80) — {usable, unsupported}.
@@ -532,7 +530,7 @@ function MobileEditorInner() {
                 label={t("Integrationen")}
                 onClick={() => {
                   setShowMenu(false);
-                  setShowHASettings(true);
+                  window.location.assign("/editor/integrations");
                 }}
               />
               <MenuItem
@@ -616,13 +614,6 @@ function MobileEditorInner() {
         <AddWidgetModal
           onClose={() => setShowAddWidget(false)}
           addWidget={addWidget}
-        />
-      )}
-      {showHASettings && (
-        <IntegrationsModal
-          onClose={() => setShowHASettings(false)}
-          settings={settings}
-          setSettings={setSettings}
         />
       )}
       {showBgSettings && (

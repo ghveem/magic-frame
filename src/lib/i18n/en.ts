@@ -394,8 +394,11 @@ export const EN: Record<string, string> = {
   "Wird am Server gespeichert. Views ohne eigene Immich-Daten nutzen diese Verbindung.": "Stored on the server. Views without their own Immich data use this connection.",
   "Globale Verbindung konfiguriert.": "Global connection configured.",
   "Optional — nur nötig, wenn Views keine eigenen Daten haben.": "Optional — only needed when views don't have their own data.",
-  "Wird verschlüsselt am Server gespeichert und beim HA-Proxy eingesetzt. Niemals im Frontend-Bundle.":
-    "Stored encrypted on the server and used by the HA proxy. Never in the frontend bundle.",
+  "Bleibt am Server und wird nie wieder an den Browser geschickt.":
+    "Stays on the server and is never sent back to the browser.",
+  "Gespeichert — leer lassen, um ihn zu behalten": "Saved — leave empty to keep it",
+  "Neue Adresse — bitte den Token oder Schlüssel noch einmal eintragen.":
+    "New address — please enter the token or key again.",
   "Verbindung konfiguriert.": "Connection configured.",
   "Nicht konfiguriert — HA-Widgets bleiben leer.": "Not configured — HA widgets stay empty.",
   "iCal-Feeds werden weiterhin direkt pro Kalender-Widget im View-Editor konfiguriert. Generische MQTT- und REST-Integrationen kommen mit dem Modul-Market.":

@@ -26,16 +26,22 @@ export default function IntegrationsPage() {
   const [immichUrl, setImmichUrl] = useState("");
   const [immichApiKey, setImmichApiKey] = useState("");
   const [immichSaveStatus, setImmichSaveStatus] = useState<null | "saving" | "saved" | "error">(null);
+  // Token und Schlüssel kommen nie zurück in den Browser, nur ob einer
+  // gespeichert ist. Ein leeres Feld behält ihn beim Speichern.
+  const [haTokenSet, setHaTokenSet] = useState(false);
+  const [immichApiKeySet, setImmichApiKeySet] = useState(false);
+  const [haError, setHaError] = useState<string | null>(null);
+  const [immichError, setImmichError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/settings", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         setHaUrl(d.haUrl ?? "");
-        setHaToken(d.haToken ?? "");
+        setHaTokenSet(!!d.haTokenSet);
         setHaManagedBy(d.haManagedBy ?? null);
         setImmichUrl(d.immichUrl ?? "");
-        setImmichApiKey(d.immichApiKey ?? "");
+        setImmichApiKeySet(!!d.immichApiKeySet);
       })
       .catch(() => {})
       .finally(() => setHaLoading(false));
@@ -44,16 +50,24 @@ export default function IntegrationsPage() {
   async function saveHa(e: React.FormEvent) {
     e.preventDefault();
     setHaSaveStatus("saving");
+    setHaError(null);
     try {
+      const url = haUrl.trim();
       const res = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ haUrl: haUrl.trim(), haToken }),
+        body: JSON.stringify({ haUrl: url, haToken }),
       });
-      if (!res.ok) throw new Error("save failed");
+      if (!res.ok) {
+        const d = await res.json().catch(() => null);
+        throw new Error(typeof d?.error === "string" ? d.error : "");
+      }
+      setHaTokenSet(url ? haTokenSet || !!haToken.trim() : false);
+      setHaToken("");
       setHaSaveStatus("saved");
       setTimeout(() => setHaSaveStatus(null), 2000);
-    } catch {
+    } catch (err: any) {
+      if (err?.message) setHaError(err.message);
       setHaSaveStatus("error");
       setTimeout(() => setHaSaveStatus(null), 2500);
     }
@@ -62,16 +76,24 @@ export default function IntegrationsPage() {
   async function saveImmich(e: React.FormEvent) {
     e.preventDefault();
     setImmichSaveStatus("saving");
+    setImmichError(null);
     try {
+      const url = immichUrl.trim();
       const res = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ immichUrl: immichUrl.trim(), immichApiKey }),
+        body: JSON.stringify({ immichUrl: url, immichApiKey }),
       });
-      if (!res.ok) throw new Error("save failed");
+      if (!res.ok) {
+        const d = await res.json().catch(() => null);
+        throw new Error(typeof d?.error === "string" ? d.error : "");
+      }
+      setImmichApiKeySet(url ? immichApiKeySet || !!immichApiKey.trim() : false);
+      setImmichApiKey("");
       setImmichSaveStatus("saved");
       setTimeout(() => setImmichSaveStatus(null), 2000);
-    } catch {
+    } catch (err: any) {
+      if (err?.message) setImmichError(err.message);
       setImmichSaveStatus("error");
       setTimeout(() => setImmichSaveStatus(null), 2500);
     }
@@ -148,18 +170,19 @@ export default function IntegrationsPage() {
                 type="password"
                 value={haToken}
                 onChange={(e) => setHaToken(e.target.value)}
-                placeholder="eyJ0eXAiOiJKV1Qi…"
+                placeholder={haTokenSet ? t("Gespeichert — leer lassen, um ihn zu behalten") : "eyJ0eXAiOiJKV1Qi…"}
                 disabled={haLoading}
                 autoComplete="off"
                 className="w-full bg-[var(--mf-surface)] border border-[var(--mf-bdr)]/10 text-[var(--mf-fg)] text-sm font-mono rounded-lg px-3 h-10 focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50"
               />
               <p className="text-[11px] text-[var(--mf-fg)]/40 mt-1">
-                {t("Wird verschlüsselt am Server gespeichert und beim HA-Proxy eingesetzt. Niemals im Frontend-Bundle.")}
+                {t("Bleibt am Server und wird nie wieder an den Browser geschickt.")}
               </p>
             </label>
+            {haError && <p className="text-xs text-red-400">{t(haError)}</p>}
             <div className="flex items-center justify-between pt-2">
               <span className="text-xs text-[var(--mf-fg)]/40">
-                {haUrl && haToken
+                {haUrl && (haToken || haTokenSet)
                   ? t("Verbindung konfiguriert.")
                   : t("Nicht konfiguriert — HA-Widgets bleiben leer.")}
               </span>
@@ -214,7 +237,7 @@ export default function IntegrationsPage() {
                 type="password"
                 value={immichApiKey}
                 onChange={(e) => setImmichApiKey(e.target.value)}
-                placeholder="•••••••••••••••••••••"
+                placeholder={immichApiKeySet ? t("Gespeichert — leer lassen, um ihn zu behalten") : "•••••••••••••••••••••"}
                 autoComplete="off"
                 className="w-full bg-[var(--mf-surface)] border border-[var(--mf-bdr)]/10 text-[var(--mf-fg)] text-sm font-mono rounded-lg px-3 h-10 focus:outline-none focus:border-blue-500 transition-colors"
               />
@@ -222,9 +245,10 @@ export default function IntegrationsPage() {
                 {t("Wird am Server gespeichert. Views ohne eigene Immich-Daten nutzen diese Verbindung.")}
               </p>
             </label>
+            {immichError && <p className="text-xs text-red-400">{t(immichError)}</p>}
             <div className="flex items-center justify-between pt-2">
               <span className="text-xs text-[var(--mf-fg)]/40">
-                {immichUrl && immichApiKey
+                {immichUrl && (immichApiKey || immichApiKeySet)
                   ? t("Globale Verbindung konfiguriert.")
                   : t("Optional — nur nötig, wenn Views keine eigenen Daten haben.")}
               </span>
