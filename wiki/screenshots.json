@@ -125,7 +125,7 @@
       ],
       "element": ".react-grid-item",
       "takenAt": {
-        "src/components/widgets/CalendarWidget.tsx": "c7def3db3f6b"
+        "src/components/widgets/CalendarWidget.tsx": "16fff306c004"
       }
     },
     {
@@ -554,7 +554,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/page.tsx": "49226899f5b7"
+        "src/app/editor/(app)/page.tsx": "481b1fef3d29"
       }
     },
     {
@@ -576,7 +576,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/page.tsx": "49226899f5b7"
+        "src/app/editor/(app)/page.tsx": "481b1fef3d29"
       }
     },
     {
@@ -647,7 +647,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/integrations/page.tsx": "7b6400ea30eb"
+        "src/app/editor/(app)/integrations/page.tsx": "9519af3152e0"
       },
       "element": "section:has(h2:text-is(\"Home Assistant\"))"
     },
@@ -673,7 +673,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/integrations/page.tsx": "7b6400ea30eb"
+        "src/app/editor/(app)/integrations/page.tsx": "9519af3152e0"
       },
       "element": "section:has(h2:text-is(\"Immich (global)\"))"
     },
@@ -699,7 +699,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/integrations/page.tsx": "7b6400ea30eb"
+        "src/app/editor/(app)/integrations/page.tsx": "9519af3152e0"
       },
       "element": "section:has(h2:text-is(\"Home Assistant lists\"))"
     },
@@ -727,7 +727,7 @@
       ],
       "takenAt": {
         "src/lib/calendar-auth/store.ts": "4b1a62a72ce2",
-        "src/app/editor/(app)/integrations/page.tsx": "7b6400ea30eb"
+        "src/app/editor/(app)/integrations/page.tsx": "9519af3152e0"
       },
       "element": "section:has(h2:text-is(\"Calendar accounts\"))"
     },
@@ -756,7 +756,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/integrations/page.tsx": "7b6400ea30eb"
+        "src/app/editor/(app)/integrations/page.tsx": "9519af3152e0"
       },
       "element": "section:has(h2:text-is(\"Calendar accounts\"))"
     },
@@ -782,7 +782,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/integrations/page.tsx": "7b6400ea30eb"
+        "src/app/editor/(app)/integrations/page.tsx": "9519af3152e0"
       },
       "element": "section:has(h2:text-is(\"OpenWeatherMap\"))"
     },
@@ -808,7 +808,7 @@
         }
       ],
       "takenAt": {
-        "src/app/editor/(app)/integrations/page.tsx": "7b6400ea30eb"
+        "src/app/editor/(app)/integrations/page.tsx": "9519af3152e0"
       },
       "element": "section:has(h2:text-is(\"Todoist\"))"
     },
