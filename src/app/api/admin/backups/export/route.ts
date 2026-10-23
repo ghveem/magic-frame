@@ -7,14 +7,15 @@ import {
   unauthorizedResponse,
 } from "@/lib/auth/dal";
 import { prisma } from "@/lib/companion/prisma";
-import { stripDeadViewSettings } from "@/lib/views/credentials";
+import { publicWallpaper, stripDeadViewSettings } from "@/lib/views/credentials";
 
 export const dynamic = "force-dynamic";
 
 // GET /api/admin/backups/export — JSON-Download aller Views
-// (Layouts, Wallpapers, View-Settings). Globale Secrets (HA-Token) bewusst NICHT.
-// Die Zugangsdaten der Hintergründe dagegen schon, sonst zeigt eine
-// eingespielte Sicherung kein Bild — deshalb nur für Admins, wie das Einspielen.
+// (Layouts, Wallpapers, View-Settings). Keine Zugangsdaten: die Datei soll man
+// weitergeben oder in ein Issue kleben können (so steht es im Wiki). Bis 1.5.7
+// standen die WebDAV-Passwörter und Immich-Schlüssel der Hintergründe trotzdem
+// drin. Nur für Admins, wie alles unter /api/admin/backups.
 export async function GET() {
   try {
     await verifyAdmin();
@@ -32,7 +33,7 @@ export async function GET() {
       dashboards: dashboards.map((d) => ({
         id: d.id,
         name: d.name,
-        wallpaper: d.wallpaper ?? null,
+        wallpaper: publicWallpaper(d.wallpaper) ?? null,
         settings: stripDeadViewSettings(d.settings) ?? null,
         widgets: d.widgets.map((w) => ({
           id: w.id,

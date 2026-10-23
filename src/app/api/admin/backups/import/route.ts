@@ -7,6 +7,9 @@ import {
   unauthorizedResponse,
 } from "@/lib/auth/dal";
 import { createSnapshot, applyDashboardState, type SnapshotData } from "@/lib/backups/snapshots";
+import { mergeStoredCredentials, stripDeadViewSettings } from "@/lib/views/credentials";
+import { adoptLegacyHaSettings } from "@/lib/settings/store";
+import { prisma } from "@/lib/companion/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -43,10 +46,16 @@ export async function POST(req: NextRequest) {
         console.error("[import] pre-snapshot failed (non-fatal):", e);
       }
 
+      // Ein Export trägt seit 1.5.8 keine Zugangsdaten mehr. Spielt man ihn in
+      // dieselbe Installation zurück, bleiben die gespeicherten stehen — solange
+      // die Adresse dieselbe ist (siehe mergeStoredCredentials).
+      const stored = await prisma.dashboard.findUnique({ where: { id: d.id }, select: { wallpaper: true } });
+      if (d.id === "1") await adoptLegacyHaSettings(d.settings);
+
       const data: SnapshotData = {
         name: typeof d.name === "string" ? d.name : `View ${d.id}`,
-        wallpaper: d.wallpaper ?? null,
-        settings: d.settings ?? null,
+        wallpaper: d.wallpaper ? mergeStoredCredentials(d.wallpaper, stored?.wallpaper) : null,
+        settings: d.settings ? stripDeadViewSettings(d.settings) : null,
         widgets: widgets
           .filter((w: any) => w && typeof w.type === "string")
           .map((w: any) => ({
