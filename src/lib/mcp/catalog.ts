@@ -35,7 +35,7 @@ const PURPOSE: Record<string, string> = {
   "QrWidget.tsx": "A QR code for Wi-Fi, a link or plain text.",
   "StatusWidget.tsx": "A device card with a picture and live details (car charging, printer, washer).",
   "TextWidget.tsx": "Free text: a heading or caption that labels the widgets around it.",
-  "SchoolRotationWidget.tsx": "Rotating school day schedule per child, with holiday support, weekly reminders and lookahead.",
+  "SchoolRotationWidget.tsx": "Rotating school day schedule per child, with holiday support, weekly reminders and lookahead. startDate/endDate are YYYY-MM-DD. schedules is a JSON string: [{\"name\":\"Mia\",\"days\":{\"1\":\"Sport, Music\",\"2\":[\"Art\"]}}] (a day is a list or a comma-separated string). reminders is a JSON string: [{\"day\":\"Friday\",\"text\":\"Gym bag\",\"icon\":\"🎒\",\"kid\":\"Mia\"}]. noSchoolDates: one 'YYYY-MM-DD reason' per line. noSchoolCalendar: a calendar.* entity whose all-day events pause the rotation.",
 };
 
 const GRID_CONTRACT = {
